@@ -4,6 +4,7 @@ class CreateSales < ActiveRecord::Migration[6.0]
       t.float :total
       t.integer :parceling
       t.integer :tax
+      t.boolean :paid
 
       t.timestamps
     end
