@@ -17,11 +17,17 @@ RSpec.describe Sale, type: :model do
     end
   end
 
-  it 'total should be calculated by products values and quantity'
+  it 'total should be calculated by products values and quantity' do
+    product = create(:product, value: 5.2)
+    create(:sale_products, product_id: product.id, quantity: 2)
+    sale = Sale.last
+
+    expect(sale.total).to eq(5.2 * 2)
+  end
 
   it 'when parcelling is greater than 1 should calculate the values'
 
   it 'when there is a tax should calculate the values'
 
-  it 'when history_payment sum be equal the sale total, sale should be paid'
+  it 'when payment_history sum be equal the sale total, sale should be paid'
 end
