@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_17_230422) do
+ActiveRecord::Schema.define(version: 2021_02_18_141042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,19 +32,17 @@ ActiveRecord::Schema.define(version: 2021_02_17_230422) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "product_clients", force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "client_id", null: false
-    t.integer "sale_id", null: false
-    t.integer "quantity"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.float "value"
     t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "sale_products", force: :cascade do |t|
+    t.integer "sale_id", null: false
+    t.integer "product_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -57,6 +55,7 @@ ActiveRecord::Schema.define(version: 2021_02_17_230422) do
     t.datetime "sale_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "client_id", null: false
   end
 
 end
