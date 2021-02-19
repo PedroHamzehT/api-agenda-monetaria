@@ -19,10 +19,9 @@ RSpec.describe Sale, type: :model do
 
   it 'total should be calculated by products values and quantity' do
     product = create(:product, value: 5.2)
-    create(:sale_products, product_id: product.id, quantity: 2)
-    sale = Sale.last
+    sale_product = create(:sale_product, product_id: product.id, quantity: 2)
 
-    expect(sale.total).to eq(5.2 * 2)
+    expect(sale_product.sale.total).to eq(5.2 * 2)
   end
 
   it 'when there is a tax should calculate the values' do
