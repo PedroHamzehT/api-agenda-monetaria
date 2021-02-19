@@ -22,24 +22,34 @@ RSpec.describe "Products", type: :request do
   end
 
   describe 'POST /products' do
-    it 'should return success status' do
-      product_attributes = FactoryBot.attributes_for(:product)
+    context 'valid parameters' do
+      it 'should return success status' do
+        product_attributes = FactoryBot.attributes_for(:product)
 
-      post '/products', params: {
-        product: product_attributes
-      }
+        post '/products', params: {
+          product: product_attributes
+        }
 
-      expect(response).to have_http_status(200)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'should create a product' do
+        product_attributes = FactoryBot.attributes_for(:product)
+
+        post '/products', params: {
+          product: product_attributes
+        }
+
+        expect(Product.last).to have_attributes(product_attributes)
+      end
     end
 
-    it 'should create a product' do
-      product_attributes = FactoryBot.attributes_for(:product)
-
-      post '/products', params: {
-        product: product_attributes
+    context 'invalid parameters' do
+      expect {
+        post '/products', params: {
+          product: { name: '', value: '', description: '' }
+        }
       }
-
-      expect(Product.last).to have_attributes(product_attributes)
     end
   end
 
