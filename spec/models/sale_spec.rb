@@ -25,9 +25,15 @@ RSpec.describe Sale, type: :model do
     expect(sale.total).to eq(5.2 * 2)
   end
 
-  it 'when parcelling is greater than 1 should calculate the values'
+  it 'when there is a tax should calculate the values' do
+    product = create(:product, value: 5.2)
+    sale = create(:sale, parcelling: 2, tax: 2)
+    create(:sale_products, sale_id: sale.id, product_id: product.id, quantity: 2)
 
-  it 'when there is a tax should calculate the values'
+    value_to_be_paid = ((sale.total / sale.parcelling) * (1 + sale.tax.to_f / 100)) * sale.parcelling
+
+    expect(sale.total).to eq(value_to_be_paid)
+  end
 
   it 'when payment_history sum be equal the sale total, sale should be paid'
 end
