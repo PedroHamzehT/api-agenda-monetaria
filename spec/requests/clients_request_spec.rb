@@ -9,15 +9,16 @@ RSpec.describe "Clients", type: :request do
     end
 
     it 'should return a clients list with them infos' do
-      create(:client)
-      create(:client)
+      clients = create_list(:client, 3)
 
       get '/clients'
 
-      api_result = JSON.parse response.body
-
-      expect(api_result.is_Array?).to eq(true)
-      # To finish need to check if the api_result client match with client in db
+      clients.each do |client|
+        expect(response.body).to include(client.name)
+        expect(response.body).to include(client.email)
+        expect(response.body).to include(client.cellphone)
+        expect(response.body).to include(client.description)
+      end
     end
   end
 
@@ -75,14 +76,21 @@ RSpec.describe "Clients", type: :request do
     end
 
     it 'should return a clients sales list' do
-      sale = create(:sale)
-      create(:sale, client_id: sale.client_id)
+      client = create(:client)
+      create_list(:sale, 3)
+      sales = create_list(:sale, 3, client_id: client.id)
 
       get "/clients/#{client.id}/sales"
 
       api_result = JSON.parse response.body
-      expect(api_result.is_Array?).to eq(true)
-      # To finish need to check if the api_result sale match with sale in db
+      expect(api_result.size).to eq(3)
+
+      sales.each do |sale|
+        expect(response.body).to include(sale.paid)
+        expect(response.body).to include(sale.tax)
+        expect(response.body).to include(sale.parcelling)
+        expect(response.body).to include(sale.sale_date)
+      end
     end
   end
 end
