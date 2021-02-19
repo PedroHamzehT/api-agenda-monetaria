@@ -9,14 +9,15 @@ RSpec.describe "Products", type: :request do
     end
 
     it 'should return a products list' do
-      create(:product)
-      create(:product)
+      products = create_list(:product, 3)
 
       get '/products'
 
-      api_result = JSON.parse response.body
-      expect(api_result.is_Array?).to eq(true)
-      # To finish need to check if api_result product match with db product
+      products.each do |product|
+        expect(response.body).to include(product.name)
+        expect(response.body).to include(product.value)
+        expect(response.body).to include(product.description)
+      end
     end
   end
 
