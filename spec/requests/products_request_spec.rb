@@ -30,7 +30,7 @@ RSpec.describe "Products", type: :request do
           product: product_attributes
         }
 
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(201)
       end
 
       it 'should create a product' do
