@@ -36,13 +36,10 @@ RSpec.describe Sale, type: :model do
   end
 
   it 'when payment_history sum be equal the sale total, sale should be paid' do
-    create(:sale_product)
-    sale_product = SaleProduct.last
-    product = Product.last
-    sale = Sale.last
+    sale_product = create(:sale_product)
 
-    total = product.value * sale_product.quantity
-    create(:payment_history, pay_value: total, sale_id: sale.id)
+    total = sale_product.product.value * sale_product.quantity
+    create(:payment_history, pay_value: total, sale_id: sale_product.sale.id)
 
     expect(Sale.last.paid).to eq(true)
   end
