@@ -43,7 +43,7 @@ RSpec.describe "Sales", type: :request do
           sale: sale_attributes
         }
 
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(201)
       end
 
       it 'should create a sale' do
