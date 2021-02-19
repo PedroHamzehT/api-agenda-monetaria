@@ -23,24 +23,34 @@ RSpec.describe "Clients", type: :request do
   end
 
   describe 'POST /clients' do
-    it 'should return success status' do
-      client_attributes = FactoryBot.attributes_for(:client)
+    context 'valid parameters' do
+      it 'should return success status' do
+        client_attributes = FactoryBot.attributes_for(:client)
 
-      post '/clients', params: {
-        client: client_attributes
-      }
+        post '/clients', params: {
+          client: client_attributes
+        }
 
-      expect(response).to have_http_status(200)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'should create a client' do
+        client_attributes = FactoryBot.attributes_for(:client)
+
+        post '/clients', params: {
+          client: client_attributes
+        }
+
+        expect(Client.last).to have_attributes(client_attributes)
+      end
     end
 
-    it 'should create a client' do
-      client_attributes = FactoryBot.attributes_for(:client)
-
-      post '/clients', params: {
-        client: client_attributes
-      }
-
-      expect(Client.last).to have_attributes(client_attributes)
+    context 'invalid parameters' do
+      expect {
+        post '/clients', params: {
+          client: { name: '', email: '', cellphone: '', description: '' }
+        }
+      }.to_not change(Client, :count)
     end
   end
 
