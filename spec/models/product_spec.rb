@@ -16,7 +16,7 @@ RSpec.describe Product, type: :model do
       expect(product).to_not be_valid
     end
 
-    it 'value blank should not be valid' do
+    it 'value equal 0 should not be valid' do
       product = build(:product, value: nil)
 
       expect(product).to_not be_valid
