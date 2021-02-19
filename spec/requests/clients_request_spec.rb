@@ -55,24 +55,39 @@ RSpec.describe "Clients", type: :request do
   end
 
   describe 'PUT /clients/:id' do
-    it 'should return success status' do
-      client = create(:client)
+    context 'valid parameters' do
+      it 'should return success status' do
+        client = create(:client)
 
-      put "/clients/#{client.id}", params: {
-        client: { name: 'Kleber' }
-      }
+        put "/clients/#{client.id}", params: {
+          client: { name: 'Kleber' }
+        }
 
-      expect(response).to have_http_status(200)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'should update the clients info' do
+        client = create(:client)
+
+        put "/clients/#{client.id}", params: {
+          client: { name: 'Kleber' }
+        }
+
+        expect(Client.last.name).to eq('Kleber')
+      end
     end
 
-    it 'should update the clients info' do
-      client = create(:client)
+    context 'invalid parameters' do
+      it 'should not edit the client' do
+        client = create(:client)
 
-      put "/clients/#{client.id}", params: {
-        client: { name: 'Kleber' }
-      }
+        put "/clients/#{client.id}", params: {
+          client: { name: '', email: '' }
+        }
 
-      expect(Client.last.name).to eq('Kleber')
+        expect(Client.last.name).to eq(client.name)
+        expect(Client.last.email).to eq(client.email)
+      end
     end
   end
 
