@@ -27,7 +27,7 @@ RSpec.describe Sale, type: :model do
   it 'when there is a tax should calculate the values' do
     product = create(:product, value: 5.2)
     sale = create(:sale, parcelling: 2, tax: 2)
-    create(:sale_products, sale_id: sale.id, product_id: product.id, quantity: 2)
+    create(:sale_product, sale_id: sale.id, product_id: product.id, quantity: 2)
 
     value_to_be_paid = ((sale.total / sale.parcelling) * (1 + sale.tax.to_f / 100)) * sale.parcelling
 
