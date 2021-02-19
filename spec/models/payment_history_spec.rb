@@ -10,8 +10,16 @@ RSpec.describe PaymentHistory, type: :model do
   end
 
   context 'invalid values' do
-    it 'date blank should not be valid'
+    it 'date blank should not be valid' do
+      payment_history = build(:payment_history, date: nil)
 
-    it 'pay_value blank should not be valid'
+      expect(payment_history).to_not be_valid
+    end
+
+    it 'pay_value equal 0 should not be valid' do
+      payment_history = build(:payment_history, pay_value: 0)
+
+      expect(payment_history).to_not be_valid
+    end
   end
 end
