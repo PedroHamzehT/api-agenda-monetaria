@@ -5,6 +5,8 @@ class Sale < ApplicationRecord
   has_many :products, through: :sale_products
   has_many :payment_histories
 
+  belongs_to :client
+
   def update_total
     self.total = sale_products.map(&:total).sum
 
