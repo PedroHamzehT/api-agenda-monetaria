@@ -46,11 +46,13 @@ RSpec.describe "Clients", type: :request do
     end
 
     context 'invalid parameters' do
-      expect {
-        post '/clients', params: {
-          client: { name: '', email: '', cellphone: '', description: '' }
-        }
-      }.to_not change(Client, :count)
+      it 'should not create a client' do
+        expect {
+          post '/clients', params: {
+            client: { name: '', email: '', cellphone: '', description: '' }
+          }
+        }.to_not change(Client, :count)
+      end
     end
   end
 
