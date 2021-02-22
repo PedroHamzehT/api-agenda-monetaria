@@ -54,24 +54,46 @@ RSpec.describe "Products", type: :request do
   end
 
   describe 'PUT /products/:id' do
-    it 'should return success status' do
-      product = create(:product)
+    context 'valid parameters' do
+      it 'should return success status' do
+        product = create(:product)
 
-      put "/products/#{product.id}", params: {
-        product: { name: 'Golden Apple' }
-      }
+        put "/products/#{product.id}", params: {
+          product: { name: 'Golden Apple' }
+        }
 
-      expect(response).to have_http_status(200)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'should edit the product' do
+        product = create(:product)
+
+        put "/products/#{product.id}", params: {
+          product: { name: 'Golden Apple' }
+        }
+
+        expect(Product.last.name).to eq('Golden Apple')
+      end
     end
 
-    it 'should update the product' do
-      product = create(:product)
+    context 'invalid parameters' do
+      it 'should not edit the product' do
+        product = create(:product)
 
-      put "/products/#{product.id}", params: {
-        product: { name: 'Golden Apple' }
-      }
+        put "/products/#{product.id}", params: {
+          product: { name: '' }
+        }
 
-      expect(Product.last.name).to eq('Golden Apple')
+        expect(Product.last.name).to eq(product.name)
+      end
+
+      it 'should return product not found error' do
+        put '/products/999', params: {
+          params: { name: 'Golden Apple' }
+        }
+
+        expect(response.body).to include('Product not found')
+      end
     end
   end
 end
