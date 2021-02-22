@@ -90,33 +90,51 @@ RSpec.describe "Clients", type: :request do
         expect(Client.last.name).to eq(client.name)
         expect(Client.last.email).to eq(client.email)
       end
+
+      it 'should return client not found error' do
+        put '/clients/999', params: {
+          client: { name: 'Kleber' }
+        }
+
+        expect(response.body).to include('Client not found')
+      end
     end
   end
 
   describe 'GET /clients/:id/sales' do
-    it 'should return success status' do
-      client = create(:sale).client
+    context 'valid client id' do
+      it 'should return success status' do
+        client = create(:sale).client
 
-      get "/clients/#{client.id}/sales"
+        get "/clients/#{client.id}/sales"
 
-      expect(response).to have_http_status(200)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'should return a clients sales list' do
+        client = create(:client)
+        create_list(:sale, 3)
+        sales = create_list(:sale, 3, client_id: client.id)
+
+        get "/clients/#{client.id}/sales"
+
+        api_result = JSON.parse response.body
+        expect(api_result.size).to eq(3)
+
+        sales.each do |sale|
+          expect(response.body).to include(sale.paid)
+          expect(response.body).to include(sale.tax)
+          expect(response.body).to include(sale.parcelling)
+          expect(response.body).to include(sale.sale_date)
+        end
+      end
     end
 
-    it 'should return a clients sales list' do
-      client = create(:client)
-      create_list(:sale, 3)
-      sales = create_list(:sale, 3, client_id: client.id)
+    context 'invalid client id' do
+      it 'should return client not found error' do
+        get '/clients/999/sales'
 
-      get "/clients/#{client.id}/sales"
-
-      api_result = JSON.parse response.body
-      expect(api_result.size).to eq(3)
-
-      sales.each do |sale|
-        expect(response.body).to include(sale.paid)
-        expect(response.body).to include(sale.tax)
-        expect(response.body).to include(sale.parcelling)
-        expect(response.body).to include(sale.sale_date)
+        expect(response.body).to eq('Client not found')
       end
     end
   end
