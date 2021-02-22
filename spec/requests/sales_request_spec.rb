@@ -101,28 +101,46 @@ RSpec.describe "Sales", type: :request do
 
         expect(sale.sale_date).to eq(sale.sale_date)
       end
+
+      it 'should return sale not found error' do
+        put '/sales/999', params: {
+          sale: { parcelling: 2 }
+        }
+
+        expect(response.body).to include('Sale not found')
+      end
     end
   end
 
   describe 'GET /sales/:id/payments' do
-    it 'should return success status' do
-      sale = create(:sale)
-      create(:payment_history, sale_id: sale.id)
+    context 'valid sale id' do
+      it 'should return success status' do
+        sale = create(:sale)
+        create(:payment_history, sale_id: sale.id)
 
-      get "/sales/#{sale.id}/payments"
+        get "/sales/#{sale.id}/payments"
 
-      expect(response).to have_http_status(200)
+        expect(response).to have_http_status(200)
+      end
+
+      it 'should return a sales payments list' do
+        sale = create(:sale)
+        payments = create_list(:payment_history, 3, sale_id: sale.id)
+
+        get "/sales/#{sale.id}/payments"
+
+        payments.each do |payment|
+          expect(response.body).to include(payment.pay_value)
+          expect(response.body).to include(payment.date)
+        end
+      end
     end
 
-    it 'should return a sales payments list' do
-      sale = create(:sale)
-      payments = create_list(:payment_history, 3, sale_id: sale.id)
+    context 'invalid sale id' do
+      it 'should return sale not found error' do
+        get '/sales/999/payments'
 
-      get "/sales/#{sale.id}/payments"
-
-      payments.each do |payment|
-        expect(response.body).to include(payment.pay_value)
-        expect(response.body).to include(payment.date)
+        expect(response.body).to include('Sale not found')
       end
     end
   end
