@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "Clients", type: :request do
-  describe 'GET /clients' do
+  describe 'GET /api/v1/clients' do
     it 'should return success status' do
-      get '/clients'
+      get '/api/v1/clients'
 
       expect(response).to have_http_status(200)
     end
@@ -11,7 +11,7 @@ RSpec.describe "Clients", type: :request do
     it 'should return a clients list with them infos' do
       clients = create_list(:client, 3)
 
-      get '/clients'
+      get '/api/v1/clients'
 
       clients.each do |client|
         expect(response.body).to include(client.name)
@@ -22,12 +22,12 @@ RSpec.describe "Clients", type: :request do
     end
   end
 
-  describe 'POST /clients' do
+  describe 'POST /api/v1/clients' do
     context 'valid parameters' do
       it 'should return created status' do
         client_attributes = FactoryBot.attributes_for(:client)
 
-        post '/clients', params: {
+        post '/api/v1/clients', params: {
           client: client_attributes
         }
 
@@ -37,7 +37,7 @@ RSpec.describe "Clients", type: :request do
       it 'should create a client' do
         client_attributes = FactoryBot.attributes_for(:client)
 
-        post '/clients', params: {
+        post '/api/v1/clients', params: {
           client: client_attributes
         }
 
@@ -48,7 +48,7 @@ RSpec.describe "Clients", type: :request do
     context 'invalid parameters' do
       it 'should not create a client' do
         expect {
-          post '/clients', params: {
+          post '/api/v1/clients', params: {
             client: { name: '', email: '', cellphone: '', description: '' }
           }
         }.to_not change(Client, :count)
@@ -56,12 +56,12 @@ RSpec.describe "Clients", type: :request do
     end
   end
 
-  describe 'PUT /clients/:id' do
+  describe 'PUT /api/v1/clients/:id' do
     context 'valid parameters' do
       it 'should return success status' do
         client = create(:client)
 
-        put "/clients/#{client.id}", params: {
+        put "/api/v1/clients/#{client.id}", params: {
           client: { name: 'Kleber' }
         }
 
@@ -71,7 +71,7 @@ RSpec.describe "Clients", type: :request do
       it 'should update the clients info' do
         client = create(:client)
 
-        put "/clients/#{client.id}", params: {
+        put "/api/v1/clients/#{client.id}", params: {
           client: { name: 'Kleber' }
         }
 
@@ -83,7 +83,7 @@ RSpec.describe "Clients", type: :request do
       it 'should not edit the client' do
         client = create(:client)
 
-        put "/clients/#{client.id}", params: {
+        put "/api/v1/clients/#{client.id}", params: {
           client: { name: '', email: '' }
         }
 
@@ -92,7 +92,7 @@ RSpec.describe "Clients", type: :request do
       end
 
       it 'should return client not found error' do
-        put '/clients/999', params: {
+        put '/api/v1/clients/999', params: {
           client: { name: 'Kleber' }
         }
 
@@ -101,12 +101,12 @@ RSpec.describe "Clients", type: :request do
     end
   end
 
-  describe 'GET /clients/:id/sales' do
+  describe 'GET /api/v1/clients/:id/sales' do
     context 'valid client id' do
       it 'should return success status' do
         client = create(:sale).client
 
-        get "/clients/#{client.id}/sales"
+        get "/api/v1/clients/#{client.id}/sales"
 
         expect(response).to have_http_status(200)
       end
@@ -116,7 +116,7 @@ RSpec.describe "Clients", type: :request do
         create_list(:sale, 3)
         sales = create_list(:sale, 3, client_id: client.id)
 
-        get "/clients/#{client.id}/sales"
+        get "/api/v1/clients/#{client.id}/sales"
 
         api_result = JSON.parse response.body
         expect(api_result.size).to eq(3)
@@ -132,7 +132,7 @@ RSpec.describe "Clients", type: :request do
 
     context 'invalid client id' do
       it 'should return client not found error' do
-        get '/clients/999/sales'
+        get '/api/v1/clients/999/sales'
 
         expect(response.body).to eq('Client not found')
       end
