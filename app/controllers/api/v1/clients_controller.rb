@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module Api
   module V1
+    # Responsible for the clients api endpoints
     class ClientsController < ApplicationController
       def index
         @clients = Client.order('name')
