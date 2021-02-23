@@ -122,10 +122,10 @@ RSpec.describe "Clients", type: :request do
         expect(api_result.size).to eq(3)
 
         sales.each do |sale|
-          expect(response.body).to include(sale.paid)
-          expect(response.body).to include(sale.tax)
-          expect(response.body).to include(sale.parcelling)
-          expect(response.body).to include(sale.sale_date)
+          expect(response.body).to include(sale.paid.to_s)
+          expect(response.body).to include(sale.tax.to_s)
+          expect(response.body).to include(sale.parcelling.to_s)
+          expect(response.body).to include(sale.sale_date.strftime('%d/%m/%Y %H:%M:%S %z'))
         end
       end
     end
@@ -134,7 +134,7 @@ RSpec.describe "Clients", type: :request do
       it 'should return client not found error' do
         get '/api/v1/clients/999/sales'
 
-        expect(response.body).to eq('Client not found')
+        expect(response.body).to include('Client not found')
       end
     end
   end

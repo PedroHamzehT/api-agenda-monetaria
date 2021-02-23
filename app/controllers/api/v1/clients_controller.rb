@@ -4,7 +4,7 @@ module Api
   module V1
     # Responsible for the clients api endpoints
     class ClientsController < ApplicationController
-      before_action :set_client, only: %i[update]
+      before_action :set_client, only: %i[update sales]
 
       def index
         @clients = Client.order('name')
@@ -35,6 +35,14 @@ module Api
         render json: { error: e.message }, status: 500
       end
 
+      def sales
+        @sales = @client.sales
+
+        render json: @sales, status: 200
+      rescue StandardError => e
+        render json: { error: e.message }, status: 500
+      end
+
       private
 
       def client_params
@@ -44,7 +52,7 @@ module Api
       def set_client
         @client = Client.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        render json: { error: 'Client not found' }
+        render json: { error: 'Client not found' }, status: 400
       end
     end
   end
