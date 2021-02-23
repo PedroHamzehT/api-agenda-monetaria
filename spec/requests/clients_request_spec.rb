@@ -16,7 +16,7 @@ RSpec.describe "Clients", type: :request do
       clients.each do |client|
         expect(response.body).to include(client.name)
         expect(response.body).to include(client.email)
-        expect(response.body).to include(client.cellphone)
+        expect(response.body).to include(client.cellphone.to_s)
         expect(response.body).to include(client.description)
       end
     end
