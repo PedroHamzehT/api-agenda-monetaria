@@ -6,7 +6,7 @@ RSpec.describe "PaymentHistories", type: :request do
       it 'should return success status' do
         payment_attributes = FactoryBot.attributer_for(:payment_history)
 
-        post '/payment_histories', params: {
+        post '/api/v1/payment_histories', params: {
           payment_history: payment_attributes
         }
 
@@ -17,7 +17,7 @@ RSpec.describe "PaymentHistories", type: :request do
         payment_attributes = FactoryBot.attributer_for(:payment_history)
 
         expect {
-          post '/payment_histories', params: {
+          post '/api/v1/payment_histories', params: {
             payment_history: payment_attributes
           }
         }.to change(PaymentHistory, :count)
@@ -27,7 +27,7 @@ RSpec.describe "PaymentHistories", type: :request do
     context 'invalid parameters' do
       it 'should not create a payment_history' do
         expect {
-          post '/payment_histories', params: {
+          post '/api/v1/payment_histories', params: {
             payment_history: { pay_value: nil, date: nil }
           }
         }.to_not change(PaymentHistory, :count)
@@ -35,12 +35,12 @@ RSpec.describe "PaymentHistories", type: :request do
     end
   end
 
-  describe 'PUT /payment_histories/:id' do
+  describe 'PUT /api/v1/payment_histories/:id' do
     context 'valid parameters' do
       it 'should return success status' do
         payment = create(:payment_history)
 
-        put "/payment_histories/#{payment.id}", params: {
+        put "/api/v1/payment_histories/#{payment.id}", params: {
           payment_history: { pay_value: 1923.50 }
         }
 
@@ -50,7 +50,7 @@ RSpec.describe "PaymentHistories", type: :request do
       it 'should edit the payment history' do
         payment = create(:payment_history)
 
-        put "/payment_histories/#{payment.id}", params: {
+        put "/api/v1/payment_histories/#{payment.id}", params: {
           payment_history: { pay_value: 1923.50 }
         }
 
@@ -62,7 +62,7 @@ RSpec.describe "PaymentHistories", type: :request do
       it 'should not edit the payment_history' do
         payment = create(:payment_history)
 
-        put "/payment_histories/#{payment.id}", params: {
+        put "/api/v1/payment_histories/#{payment.id}", params: {
           payment_history: { pay_value: nil }
         }
 
@@ -70,7 +70,7 @@ RSpec.describe "PaymentHistories", type: :request do
       end
 
       it 'should return payment_history not found error' do
-        put '/payment_histories/999', params: {
+        put '/api/v1/payment_histories/999', params: {
           payment_history: { pay_value: 50 }
         }
 
@@ -79,7 +79,7 @@ RSpec.describe "PaymentHistories", type: :request do
     end
   end
 
-  describe 'DELETE /payment_histories/:id' do
+  describe 'DELETE /api/v1/payment_histories/:id' do
     context 'valid parameters' do
       it 'should return success status' do
         payment = create(:payment_history)

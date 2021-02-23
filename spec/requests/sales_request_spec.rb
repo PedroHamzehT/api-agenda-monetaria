@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "Sales", type: :request do
-  describe 'GET /sales' do
+  describe 'GET /api/v1/sales' do
     it 'should return success status' do
-      get '/sales'
+      get '/api/v1/sales'
 
       expect(response).to have_http_status(200)
     end
@@ -11,7 +11,7 @@ RSpec.describe "Sales", type: :request do
     it 'should return a sales list' do
       sales = create_list(:sale, 3)
 
-      get '/sales'
+      get '/api/v1/sales'
 
       sales.each do |sale|
         expect(response.body).to include(sale.paid)
@@ -26,7 +26,7 @@ RSpec.describe "Sales", type: :request do
       create(:sale)
       create(:sale, client_id: client.id)
 
-      get "/sales?client_id=#{client.id}"
+      get "/api/v1/sales?client_id=#{client.id}"
 
       api_result = JSON.parse response.body
 
@@ -34,12 +34,12 @@ RSpec.describe "Sales", type: :request do
     end
   end
 
-  describe 'POST /sales' do
+  describe 'POST /api/v1/sales' do
     context 'valid parameters' do
       it 'should return success status' do
         sale_attributes = FactoryBot.attributes_for(:sale)
 
-        post '/sales', params: {
+        post '/api/v1/sales', params: {
           sale: sale_attributes
         }
 
@@ -49,7 +49,7 @@ RSpec.describe "Sales", type: :request do
       it 'should create a sale' do
         sale_attributes = FactoryBot.attributes_for(:sale)
 
-        post '/sales', params: {
+        post '/api/v1/sales', params: {
           sale: sale_attributes
         }
 
@@ -60,7 +60,7 @@ RSpec.describe "Sales", type: :request do
     context 'invalid parameters' do
       it 'should not create a sale' do
         expect {
-          post '/sales', params: {
+          post '/api/v1/sales', params: {
             sale: { sale_date: nil }
           }
         }.to_not change(Sale, :count)
@@ -68,12 +68,12 @@ RSpec.describe "Sales", type: :request do
     end
   end
 
-  describe 'PUT /sales/:id' do
+  describe 'PUT /api/v1/sales/:id' do
     context 'valid parameters' do
       it 'should return success status' do
         sale = create(:sale)
 
-        put "/sales/#{sale.id}", params: {
+        put "/api/v1/sales/#{sale.id}", params: {
           sale: { parcelling: 99 }
         }
 
@@ -83,7 +83,7 @@ RSpec.describe "Sales", type: :request do
       it 'should update the sale' do
         sale = create(:sale)
 
-        put "/sales/#{sale.id}", params: {
+        put "/api/v1/sales/#{sale.id}", params: {
           sale: { parcelling: 99 }
         }
 
@@ -95,7 +95,7 @@ RSpec.describe "Sales", type: :request do
       it 'should not edit the sale' do
         sale = create(:sale)
 
-        put "/sales/#{sale.id}", params: {
+        put "/api/v1/sales/#{sale.id}", params: {
           sale: { sale_date: nil }
         }
 
@@ -103,7 +103,7 @@ RSpec.describe "Sales", type: :request do
       end
 
       it 'should return sale not found error' do
-        put '/sales/999', params: {
+        put '/api/v1/sales/999', params: {
           sale: { parcelling: 2 }
         }
 
@@ -112,13 +112,13 @@ RSpec.describe "Sales", type: :request do
     end
   end
 
-  describe 'GET /sales/:id/payments' do
+  describe 'GET /api/v1/sales/:id/payments' do
     context 'valid sale id' do
       it 'should return success status' do
         sale = create(:sale)
         create(:payment_history, sale_id: sale.id)
 
-        get "/sales/#{sale.id}/payments"
+        get "/api/v1/sales/#{sale.id}/payments"
 
         expect(response).to have_http_status(200)
       end
@@ -127,7 +127,7 @@ RSpec.describe "Sales", type: :request do
         sale = create(:sale)
         payments = create_list(:payment_history, 3, sale_id: sale.id)
 
-        get "/sales/#{sale.id}/payments"
+        get "/api/v1/sales/#{sale.id}/payments"
 
         payments.each do |payment|
           expect(response.body).to include(payment.pay_value)
@@ -138,7 +138,7 @@ RSpec.describe "Sales", type: :request do
 
     context 'invalid sale id' do
       it 'should return sale not found error' do
-        get '/sales/999/payments'
+        get '/api/v1/sales/999/payments'
 
         expect(response.body).to include('Sale not found')
       end
