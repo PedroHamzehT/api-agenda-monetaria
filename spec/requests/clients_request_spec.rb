@@ -5,7 +5,7 @@ RSpec.describe "Clients", type: :request do
     it 'should return success status' do
       get '/api/v1/clients'
 
-      expect(response).to have_http_status(201)
+      expect(response).to have_http_status(200)
     end
 
     it 'should return a clients list with them infos' do
