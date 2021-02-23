@@ -45,11 +45,13 @@ RSpec.describe "Products", type: :request do
     end
 
     context 'invalid parameters' do
-      expect {
-        post '/products', params: {
-          product: { name: '', value: '', description: '' }
-        }
-      }
+      it 'should not create a product' do
+        expect {
+          post '/products', params: {
+            product: { name: '', value: '', description: '' }
+          }
+        }.to_not change(Product, :count)
+      end
     end
   end
 
