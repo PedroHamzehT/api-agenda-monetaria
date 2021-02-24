@@ -48,12 +48,14 @@ RSpec.describe "Sales", type: :request do
 
       it 'should create a sale' do
         sale_attributes = FactoryBot.attributes_for(:sale)
+        sale_attributes[:sale_date] = sale_attributes[:sale_date].in_time_zone
 
         post '/api/v1/sales', params: {
           sale: sale_attributes
         }
 
-        expect(Sale.last).to have_attributes(sale_attributes)
+        expect(Sale.last.sale_date.in_time_zone.to_s).to eq(sale_attributes[:sale_date].to_s)
+        expect(Sale.last.client_id).to eq(sale_attributes[:client_id])
       end
     end
 
