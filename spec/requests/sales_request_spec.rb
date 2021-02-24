@@ -26,7 +26,7 @@ RSpec.describe "Sales", type: :request do
       create(:sale)
       create(:sale, client_id: client.id)
 
-      get "/api/v1/sales?client_id=#{client.id}"
+      get "/api/v1/sales?client=#{client.id}"
 
       api_result = JSON.parse response.body
 

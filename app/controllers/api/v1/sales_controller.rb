@@ -6,6 +6,7 @@ module Api
     class SalesController < ApplicationController
       def index
         @sales = Sale.order('sale_date')
+        @sales = @sales.where(client_id: params[:client]) if params[:client].present?
 
         render json: @sales, status: 200
       rescue StandardError => e
