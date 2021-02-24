@@ -15,8 +15,8 @@ RSpec.describe "Products", type: :request do
 
       products.each do |product|
         expect(response.body).to include(product.name)
-        expect(response.body).to include(product.value)
-        expect(response.body).to include(product.description)
+        expect(response.body).to include(product.value.to_s)
+        expect(response.body).to include(product.description.to_s)
       end
     end
   end
