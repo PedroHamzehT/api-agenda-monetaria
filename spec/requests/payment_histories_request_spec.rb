@@ -4,7 +4,7 @@ RSpec.describe "PaymentHistories", type: :request do
   describe 'POST /payments_histories' do
     context 'valid parameters' do
       it 'should return success status' do
-        payment_attributes = FactoryBot.attributer_for(:payment_history)
+        payment_attributes = FactoryBot.attributes_for(:payment_history)
 
         post '/api/v1/payment_histories', params: {
           payment_history: payment_attributes
@@ -14,7 +14,7 @@ RSpec.describe "PaymentHistories", type: :request do
       end
 
       it 'should create a payment history' do
-        payment_attributes = FactoryBot.attributer_for(:payment_history)
+        payment_attributes = FactoryBot.attributes_for(:payment_history)
 
         expect {
           post '/api/v1/payment_histories', params: {
