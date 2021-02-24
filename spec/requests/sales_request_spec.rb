@@ -14,10 +14,10 @@ RSpec.describe "Sales", type: :request do
       get '/api/v1/sales'
 
       sales.each do |sale|
-        expect(response.body).to include(sale.paid)
-        expect(response.body).to include(sale.tax)
-        expect(response.body).to include(sale.parcelling)
-        expect(response.body).to include(sale.sale_date)
+        expect(response.body).to include(sale.paid.to_s)
+        expect(response.body).to include(sale.tax.to_s)
+        expect(response.body).to include(sale.parcelling.to_s)
+        expect(response.body).to include(sale.sale_date.strftime('%d/%m/%Y %H:%M:%S %z'))
       end
     end
 
