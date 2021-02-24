@@ -6,6 +6,9 @@ Rails.application.routes.draw do
       get '/clients/:id/sales', to: 'clients#sales', as: 'client_sales'
 
       resources :products, only: %i[index create update]
+
+      resources :sales, only: %i[index create update]
+      get '/sales/:id/payments', to: 'sales#payments', as: 'sale_payments'
     end
   end
 end
