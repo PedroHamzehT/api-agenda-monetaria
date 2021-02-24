@@ -4,7 +4,7 @@ module Api
   module V1
     # Responsible for the payment histories api endpoints
     class PaymentHistoriesController < ApplicationController
-      before_action :set_payment, only: %i[update]
+      before_action :set_payment, only: %i[update destroy]
 
       def create
         @payment = PaymentHistory.new(payment_params)
@@ -23,6 +23,14 @@ module Api
         else
           render json: { error: @payment.errors.full_message }, status: 400
         end
+      rescue StandardError => e
+        render json: { error: e.message }, status: 500
+      end
+
+      def destroy
+        @payment.destroy
+
+        render json: nil, status: 200
       rescue StandardError => e
         render json: { error: e.message }, status: 500
       end

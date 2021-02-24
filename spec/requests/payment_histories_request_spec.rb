@@ -84,7 +84,7 @@ RSpec.describe "PaymentHistories", type: :request do
       it 'should return success status' do
         payment = create(:payment_history)
 
-        delete "/payment_history/#{payment.id}"
+        delete "/api/v1/payment_histories/#{payment.id}"
 
         expect(response).to have_http_status(200)
       end
@@ -93,7 +93,7 @@ RSpec.describe "PaymentHistories", type: :request do
         payment = create(:payment_history)
         expect(PaymentHistory.count).to eq(1)
 
-        delete "/payment_history/#{payment.id}"
+        delete "/api/v1/payment_histories/#{payment.id}"
         expect(PaymentHistory.count).to eq(0)
       end
     end
@@ -103,7 +103,7 @@ RSpec.describe "PaymentHistories", type: :request do
         create(:payment_history)
         expect(PaymentHistory.count).to eq(1)
 
-        delete '/payment_history/999'
+        delete '/api/v1/payment_histories/999'
         expect(response.body).to include('Payment history not found')
         expect(PaymentHistory.count).to eq(1)
       end
