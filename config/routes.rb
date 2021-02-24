@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :clients, only: %i[index create update]
       get '/clients/:id/sales', to: 'clients#sales', as: 'client_sales'
+
+      resources :products, only: %i[index create update]
     end
   end
 end
