@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
       resources :sales, only: %i[index create update]
       get '/sales/:id/payments', to: 'sales#payments', as: 'sale_payments'
+
+      resources :payment_histories, only: %i[create update destroy]
     end
   end
 end
