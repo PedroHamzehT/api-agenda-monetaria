@@ -132,8 +132,8 @@ RSpec.describe "Sales", type: :request do
         get "/api/v1/sales/#{sale.id}/payments"
 
         payments.each do |payment|
-          expect(response.body).to include(payment.pay_value)
-          expect(response.body).to include(payment.date)
+          expect(response.body).to include(payment.pay_value.to_s)
+          expect(response.body).to include(payment.date.strftime('%d/%m/%Y %H:%M:%S %z'))
         end
       end
     end

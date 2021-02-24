@@ -4,7 +4,7 @@ module Api
   module V1
     # Responsible for the sales api endpoints
     class SalesController < ApplicationController
-      before_action :set_sale, only: %i[update]
+      before_action :set_sale, only: %i[update payments]
 
       def index
         @sales = Sale.order('sale_date')
@@ -32,6 +32,14 @@ module Api
         else
           render json: { error: @sale.errors.full_message }, status: 400
         end
+      rescue StandardError => e
+        render json: { error: e.message }, status: 500
+      end
+
+      def payments
+        @payments = @sale.payment_histories
+
+        render json: @payments, status: 200
       rescue StandardError => e
         render json: { error: e.message }, status: 500
       end
