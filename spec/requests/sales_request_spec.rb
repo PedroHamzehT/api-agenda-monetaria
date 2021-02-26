@@ -38,9 +38,12 @@ RSpec.describe "Sales", type: :request do
     context 'valid parameters' do
       it 'should return success status' do
         sale_attributes = FactoryBot.attributes_for(:sale)
+        products = create_list(:product, 3)
+        products_attributes = products.map { |product| { product_id: product.id, quantity: rand(1..9) } }
 
         post '/api/v1/sales', params: {
-          sale: sale_attributes
+          sale: sale_attributes,
+          products: products_attributes
         }
 
         expect(response).to have_http_status(201)
@@ -50,12 +53,17 @@ RSpec.describe "Sales", type: :request do
         sale_attributes = FactoryBot.attributes_for(:sale)
         sale_attributes[:sale_date] = sale_attributes[:sale_date].in_time_zone
 
+        products = create_list(:product, 3)
+        products_attributes = products.map { |product| { product_id: product.id, quantity: rand(1..9) } }
+
         post '/api/v1/sales', params: {
-          sale: sale_attributes
+          sale: sale_attributes,
+          products: products_attributes
         }
 
         expect(Sale.last.sale_date.in_time_zone.to_s).to eq(sale_attributes[:sale_date].to_s)
         expect(Sale.last.client_id).to eq(sale_attributes[:client_id])
+        expect(Sale.last.products.count).to eq(3)
       end
     end
 
@@ -67,6 +75,17 @@ RSpec.describe "Sales", type: :request do
           }
         }.to_not change(Sale, :count)
       end
+
+      it 'should return sale must have at least one product error' do
+        sale_attributes = FactoryBot.attributes_for(:sale)
+
+        post '/api/v1/sales', params: {
+          sale: sale_attributes
+        }
+
+        expect(Sale.count).to eq(0)
+        expect(response.body).to include('Sale must have at least one product')
+      end
     end
   end
 
@@ -74,9 +93,12 @@ RSpec.describe "Sales", type: :request do
     context 'valid parameters' do
       it 'should return success status' do
         sale = create(:sale)
+        create_list(:sale_product, 3, sale_id: sale.id)
+        products_attributes = SaleProduct.all.map { |sp| { product_id: sp.product_id, quantity: sp.quantity } }
 
         put "/api/v1/sales/#{sale.id}", params: {
-          sale: { parcelling: 99 }
+          sale: { parcelling: 99 },
+          products: products_attributes
         }
 
         expect(response).to have_http_status(200)
@@ -84,12 +106,33 @@ RSpec.describe "Sales", type: :request do
 
       it 'should update the sale' do
         sale = create(:sale)
+        create_list(:sale_product, 3, sale_id: sale.id)
+        products_attributes = SaleProduct.all.map { |sp| { product_id: sp.product_id, quantity: sp.quantity } }
 
         put "/api/v1/sales/#{sale.id}", params: {
-          sale: { parcelling: 99 }
+          sale: { parcelling: 99 },
+          products: products_attributes
         }
 
         expect(Sale.last.parcelling).to eq(99)
+      end
+
+      it 'should update the sale products' do
+        sale = create(:sale)
+        create_list(:sale_product, 3, sale_id: sale.id)
+        products_attributes = [SaleProduct.first].map { |sp| { product_id: sp.product_id, quantity: sp.quantity } }
+
+        expect(sale.products.count).to eq(3)
+
+        put "/api/v1/sales/#{sale.id}", params: {
+          products: products_attributes
+        }
+
+        expect(sale.products.count).to eq(1)
+        products_attributes.each do |product_attribute|
+          expect(sale.products.first.id).to eq(product_attribute[:product_id])
+          expect(sale.sale_products.first.quantity).to eq(product_attribute[:quantity])
+        end
       end
     end
 
