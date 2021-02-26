@@ -32,6 +32,20 @@ RSpec.describe "Sales", type: :request do
 
       expect(api_result.first['client_id']).to eq(client.id)
     end
+
+    it 'should return also sale products' do
+      create(:sale)
+      sale_products = create_list(:sale_product, 3, sale_id: Sale.last.id)
+
+      get '/api/v1/sales'
+
+      api_result = JSON.parse response.body
+      sale_products.each do |sale_product|
+        expect(api_result).to include(sale_product.product_id)
+        expect(api_result).to include(sale_product.quantity)
+        expect(api_result).to include(sale_product.name)
+      end
+    end
   end
 
   describe 'POST /api/v1/sales' do
