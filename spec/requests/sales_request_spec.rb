@@ -39,11 +39,10 @@ RSpec.describe "Sales", type: :request do
 
       get '/api/v1/sales'
 
-      api_result = JSON.parse response.body
       sale_products.each do |sale_product|
-        expect(api_result).to include(sale_product.product_id)
-        expect(api_result).to include(sale_product.quantity)
-        expect(api_result).to include(sale_product.name)
+        expect(response.body).to include(sale_product.product_id.to_s)
+        expect(response.body).to include(sale_product.quantity.to_s)
+        expect(response.body).to include(sale_product.product.name)
       end
     end
   end
