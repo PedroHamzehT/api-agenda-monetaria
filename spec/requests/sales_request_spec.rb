@@ -45,6 +45,10 @@ RSpec.describe "Sales", type: :request do
         expect(response.body).to include(sale_product.product.name)
       end
     end
+
+    it 'should return also sale payments'
+
+    it 'should filter the sales by the paid status'
   end
 
   describe 'POST /api/v1/sales' do
