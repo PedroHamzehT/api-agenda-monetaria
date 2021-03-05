@@ -133,11 +133,12 @@ RSpec.describe "Sales", type: :request do
       it 'should update the sale products' do
         sale = create(:sale)
         create_list(:sale_product, 3, sale_id: sale.id)
-        products_attributes = [SaleProduct.first].map { |sp| { product_id: sp.product_id, quantity: sp.quantity } }
+        products_attributes = [SaleProduct.first].map { |sp| { product_id: sp.product_id, quantity: (sp.quantity + 2) } }
 
         expect(sale.products.count).to eq(3)
 
         put "/api/v1/sales/#{sale.id}", params: {
+          sale: sale.attributes,
           products: products_attributes
         }
 
