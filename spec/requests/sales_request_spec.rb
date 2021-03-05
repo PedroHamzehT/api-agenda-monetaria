@@ -143,8 +143,6 @@ RSpec.describe 'Sales', type: :request do
           { product_id: sp.product_id, quantity: (sp.quantity + 2) }
         end
 
-        expect(sale.products.count).to eq(3)
-
         put "/api/v1/sales/#{sale.id}", params: {
           sale: sale.attributes,
           products: products_attributes
