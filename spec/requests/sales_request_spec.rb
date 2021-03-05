@@ -51,6 +51,14 @@ RSpec.describe 'Sales', type: :request do
     it 'should return also sale payments'
 
     it 'should filter the sales by the paid status'
+
+    it 'should return only twenty results per page' do
+      create_list(:sale, 25)
+
+      get '/api/v1/sales'
+
+      expect(JSON.parse(response.body).count).to eq(20)
+    end
   end
 
   describe 'POST /api/v1/sales' do
