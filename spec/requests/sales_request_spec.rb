@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Sales", type: :request do
+RSpec.describe 'Sales', type: :request do
   describe 'GET /api/v1/sales' do
     it 'should return success status' do
       get '/api/v1/sales'
@@ -86,11 +88,11 @@ RSpec.describe "Sales", type: :request do
 
     context 'invalid parameters' do
       it 'should not create a sale' do
-        expect {
+        expect do
           post '/api/v1/sales', params: {
             sale: { sale_date: nil }
           }
-        }.to_not change(Sale, :count)
+        end.to_not change(Sale, :count)
       end
 
       it 'should return sale must have at least one product error' do
@@ -137,7 +139,9 @@ RSpec.describe "Sales", type: :request do
       it 'should update the sale products' do
         sale = create(:sale)
         create_list(:sale_product, 3, sale_id: sale.id)
-        products_attributes = [SaleProduct.first].map { |sp| { product_id: sp.product_id, quantity: (sp.quantity + 2) } }
+        products_attributes = [SaleProduct.first].map do |sp|
+          { product_id: sp.product_id, quantity: (sp.quantity + 2) }
+        end
 
         expect(sale.products.count).to eq(3)
 
