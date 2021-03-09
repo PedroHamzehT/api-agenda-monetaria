@@ -7,7 +7,7 @@ module Api
       before_action :set_client, only: %i[update sales]
 
       def index
-        @clients = Client.order('name')
+        @pagy, @clients = pagy(Client.order('name'))
 
         render json: @clients, status: 200
       rescue StandardError => e
