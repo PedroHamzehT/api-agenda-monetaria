@@ -59,7 +59,14 @@ RSpec.describe 'Sales', type: :request do
       expect(response.body).to include(payment.pay_value.to_s)
     end
 
-    it 'should filter the sales by the paid status'
+    it 'should filter the sales by the paid status' do
+      create_list(:sale, 10)
+      create(:sale, paid: true)
+
+      get '/api/v1/sales?paid=true'
+
+      expect(JSON.parse(response.body).count).to eq(1)
+    end
 
     it 'should return only twenty results per page' do
       create_list(:sale, 25)
