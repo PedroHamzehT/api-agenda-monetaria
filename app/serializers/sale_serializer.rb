@@ -7,6 +7,7 @@ class SaleSerializer < ActiveModel::Serializer
              :sale_date,
              :client_id,
              :products,
+             :payments,
              :created_at,
              :updated_at
 
@@ -20,6 +21,15 @@ class SaleSerializer < ActiveModel::Serializer
         product_id: sale_product.product_id,
         product_name: sale_product.product.name,
         quantity: sale_product.quantity
+      }
+    end
+  end
+
+  def payments
+    object.payment_histories.map do |payment|
+      {
+        pay_value: payment.pay_value,
+        date: payment.date.strftime('%d/%m/%Y %H:%M:%S %z')
       }
     end
   end
