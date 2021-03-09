@@ -48,7 +48,16 @@ RSpec.describe 'Sales', type: :request do
       end
     end
 
-    it 'should return also sale payments'
+    it 'should return also sale payments' do
+      create(:sale)
+      create(:sale_product, sale_id: Sale.last.id)
+      payment = create(:payment_history, sale_id: Sale.last.id, pay_value: 200)
+
+      get '/api/v1/sales'
+
+      expect(response.body).to include(payment.date.strftime('%d/%m/%Y %H:%M:%S %z'))
+      expect(response.body).to include(payment.pay_value.to_s)
+    end
 
     it 'should filter the sales by the paid status'
 
