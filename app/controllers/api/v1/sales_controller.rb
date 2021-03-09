@@ -10,6 +10,7 @@ module Api
       def index
         @sales = Sale.order('sale_date')
         @sales = @sales.where(client_id: params[:client]) if params[:client].present?
+        @sales = @sales.where(paid: params[:paid]) if params[:paid].present?
 
         render json: @sales, status: 200
       rescue StandardError => e
