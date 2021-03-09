@@ -20,6 +20,14 @@ RSpec.describe "Clients", type: :request do
         expect(response.body).to include(client.description)
       end
     end
+
+    it 'should return only twenty clients per page' do
+      create_list(:client, 25)
+
+      get '/api/v1/clients'
+
+      expect(JSON.parse(response.body).count).to eq(20)
+    end
   end
 
   describe 'POST /api/v1/clients' do
