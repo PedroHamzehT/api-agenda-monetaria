@@ -1,9 +1,9 @@
 class Sale < ApplicationRecord
   validates_presence_of :sale_date
 
-  has_many :sale_products
+  has_many :sale_products, dependent: :destroy
   has_many :products, through: :sale_products
-  has_many :payment_histories
+  has_many :payment_histories, dependent: :destroy
 
   belongs_to :client
 
