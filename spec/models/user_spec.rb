@@ -2,9 +2,17 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   context 'valid values' do
-    it 'should create the user'
+    it 'should create the user' do
+      User.create(name: 'User', email: 'user@example.com', password: 'password', password_confirmation: 'password')
 
-    it 'the user password should be encrypted'
+      expect(User.count).to eq(1)
+    end
+
+    it 'the user password should be encrypted' do
+      user = User.create(name: 'User', email: 'user@example.com', password: 'password', password_confirmation: 'password')
+
+      expect(user.password_digest).to_not eq('password')
+    end
   end
 
   context 'invalid values' do
