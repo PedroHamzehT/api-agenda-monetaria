@@ -16,7 +16,11 @@ RSpec.describe User, type: :model do
   end
 
   context 'invalid values' do
-    it 'should not create the user when email is missing'
+    it 'should not create the user when email is missing' do
+      user = build(:user, email: nil)
+
+      expect(user).to_not be_valid
+    end
 
     it 'should not create the user when name is missing'
 
