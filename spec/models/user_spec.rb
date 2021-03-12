@@ -35,6 +35,10 @@ RSpec.describe User, type: :model do
       expect(user).to_not be_valid
     end
 
-    it 'should not create the user when password is missing'
+    it 'should not create the user when password is missing' do
+      user = build(:user, password: nil)
+
+      expect(user).to_not be_valid
+    end
   end
 end
