@@ -4,7 +4,7 @@ module Api
       def sign_up
       end
 
-      def sign_id
+      def sign_in
       end
     end
   end
