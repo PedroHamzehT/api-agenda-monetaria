@@ -28,7 +28,12 @@ RSpec.describe User, type: :model do
       expect(user).to_not be_valid
     end
 
-    it 'should not create the user when email already exists'
+    it 'should not create the user when email already exists' do
+      create(:user, email: 'user@example.com')
+      user = build(:user, email: 'user@example.com')
+
+      expect(user).to_not be_valid
+    end
 
     it 'should not create the user when password is missing'
   end
