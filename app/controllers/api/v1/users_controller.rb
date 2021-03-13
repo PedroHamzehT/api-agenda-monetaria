@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module Api
   module V1
+    # Controller responsible to sign_up, sign_in and update the users
     class UsersController < ApplicationController
       def sign_up
         @user = User.new(user_params)
@@ -12,8 +15,7 @@ module Api
         render json: { error: e.message }, status: 500
       end
 
-      def sign_in
-      end
+      def sign_in; end
 
       private
 
