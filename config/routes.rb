@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       get '/sales/:id/payments', to: 'sales#payments', as: 'sale_payments'
 
       resources :payment_histories, only: %i[create update destroy]
+
+      post '/sign_up', to: 'users#sign_up', as: 'user_sign_up'
     end
   end
 end

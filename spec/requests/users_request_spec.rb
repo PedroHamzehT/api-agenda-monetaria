@@ -3,7 +3,13 @@ require 'rails_helper'
 RSpec.describe "Users", type: :request do
   describe 'POST /api/v1/sign_up' do
     context 'valid parameters' do
-      it 'should return created status'
+      it 'should return created status' do
+        post '/api/v1/sign_up', params: {
+          user: { name: 'User', email: 'user@example.com', password: 'password', password_confirmation: 'password' }
+        }
+
+        expect(response).to have_http_status(201)
+      end
 
       it 'should create a user'
 
