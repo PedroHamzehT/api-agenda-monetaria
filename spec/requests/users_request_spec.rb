@@ -48,7 +48,13 @@ RSpec.describe "Users", type: :request do
         expect(response.body).to include("Name can't be blank")
       end
 
-      it 'should warn when password is missing'
+      it 'should warn when password is missing' do
+        post '/api/v1/sign_up', params: {
+          user: { name: 'User', email: 'user@example.com', password: nil, password_confirmation: nil }
+        }
+
+        expect(response.body).to include("Password can't be blank")
+      end
 
       it 'should warn when email already exists'
 
