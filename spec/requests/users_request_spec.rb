@@ -32,7 +32,13 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(400)
       end
 
-      it 'should warn when email is missing'
+      it 'should warn when email is missing' do
+        post '/api/v1/sign_up', params: {
+          user: { name: 'User', email: nil, password: 'password', password_confirmation: 'password' }
+        }
+
+        expect(response.body).to include("Email can't be blank")
+      end
 
       it 'should warn when name is missing'
 
