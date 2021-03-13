@@ -11,7 +11,14 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(201)
       end
 
-      it 'should create a user'
+      it 'should create a user' do
+        post '/api/v1/sign_up', params: {
+          user: { name: 'User', email: 'user@example.com', password: 'password', password_confirmation: 'password' }
+        }
+
+        expect(User.count).to eq(1)
+        expect(User.last.email).to eq('user@example.com')
+      end
 
       it 'should return a token'
     end
