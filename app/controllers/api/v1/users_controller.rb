@@ -9,7 +9,7 @@ module Api
         if @user.save
           render json: {}, status: 201
         else
-          render json: { error: @user.errors.full_message }, status: 400
+          render json: { error: @user.errors.full_messages }, status: 400
         end
       rescue StandardError => e
         render json: { error: e.message }, status: 500
