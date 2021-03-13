@@ -24,7 +24,13 @@ RSpec.describe "Users", type: :request do
     end
 
     context 'invalid parameters' do
-      it 'should return bad request status'
+      it 'should return bad request status' do
+        post '/api/v1/sign_up', params: {
+          user: { name: nil, email: nil, password: nil, password_confirmation: nil }
+        }
+
+        expect(response).to have_http_status(400)
+      end
 
       it 'should warn when email is missing'
 
