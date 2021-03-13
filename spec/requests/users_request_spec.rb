@@ -52,6 +52,8 @@ RSpec.describe "Users", type: :request do
 
     context 'invalid parameters' do
       it 'should return bad request status'
+
+      it 'should warn when email already exists'
     end
   end
 end
