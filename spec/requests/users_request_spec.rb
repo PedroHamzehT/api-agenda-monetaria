@@ -56,7 +56,15 @@ RSpec.describe "Users", type: :request do
         expect(response.body).to include("Password can't be blank")
       end
 
-      it 'should warn when email already exists'
+      it 'should warn when email already exists' do
+        create(:user, email: 'user@example.com')
+
+        post '/api/v1/sign_up', params: {
+          user: { name: 'User', email: 'user@example.com', password: 'password', password_confirmation: 'password' }
+        }
+
+        expect(response.body).to include('Email has already been taken')
+      end
 
       it 'should warn when password and password confirmation are not matching'
     end
