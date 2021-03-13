@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Users", type: :request do
   describe 'POST /api/v1/sign_up' do
     context 'valid parameters' do
-      it 'should return success status'
+      it 'should return created status'
 
       it 'should create a user'
 
@@ -20,6 +20,8 @@ RSpec.describe "Users", type: :request do
       it 'should warn when password is missing'
 
       it 'should warn when email already exists'
+
+      it 'should warn when password and password confirmation are not matching'
     end
   end
 
