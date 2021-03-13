@@ -66,7 +66,13 @@ RSpec.describe "Users", type: :request do
         expect(response.body).to include('Email has already been taken')
       end
 
-      it 'should warn when password and password confirmation are not matching'
+      it 'should warn when password and password confirmation are not matching' do
+        post '/api/v1/sign_up', params: {
+          user: { name: 'User', email: 'user@example.com', password: 'password', password_confirmation: 'p@ssword' }
+        }
+
+        expect(response.body).to include("Password confirmation doesn't match Password")
+      end
     end
   end
 
