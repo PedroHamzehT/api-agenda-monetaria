@@ -85,6 +85,7 @@ GEM
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
     jsonapi-renderer (0.2.2)
+    jwt (2.2.2)
     listen (3.4.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -190,6 +191,7 @@ DEPENDENCIES
   byebug
   factory_bot_rails (~> 6.1)
   faker (~> 2.16)
+  jwt (~> 2.2, >= 2.2.2)
   listen (~> 3.2)
   pagy (~> 3.11)
   pg (>= 0.18, < 2.0)
