@@ -20,7 +20,26 @@ RSpec.describe "Users", type: :request do
         expect(User.last.email).to eq('user@example.com')
       end
 
-      it 'should return a token'
+      it 'should return a token' do
+        post '/api/v1/sign_up', params: {
+          user: { name: 'User', email: 'user@example.com', password: 'password', password_confirmation: 'password' }
+        }
+
+        api_result = JSON.parse(response.body)
+        decoded_token = JWT.decode(
+          api_result['token'],
+          AuthenticationTokenService::HMAC_SECRET,
+          true,
+          { algorithm: AuthenticationTokenService::ALGORITHM_TYPE }
+        )
+
+        expect(decoded_token).to eq(
+          [
+            { 'user_id' => User.last.id },
+            { 'alg' => 'HS256' }
+          ]
+        )
+      end
     end
 
     context 'invalid parameters' do
