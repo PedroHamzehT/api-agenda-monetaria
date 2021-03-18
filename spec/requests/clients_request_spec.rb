@@ -56,7 +56,7 @@ RSpec.describe "Clients", type: :request do
 
     context 'valid parameters' do
       it 'should return created status' do
-        client_attributes = FactoryBot.attributes_for(:client)
+        client_attributes = FactoryBot.attributes_for(:client, user_id: user.id)
 
         post '/api/v1/clients', params: {
           client: client_attributes
@@ -68,7 +68,7 @@ RSpec.describe "Clients", type: :request do
       end
 
       it 'should create a client' do
-        client_attributes = FactoryBot.attributes_for(:client)
+        client_attributes = FactoryBot.attributes_for(:client, user_id: user.id)
 
         post '/api/v1/clients', params: {
           client: client_attributes
@@ -94,22 +94,29 @@ RSpec.describe "Clients", type: :request do
   end
 
   describe 'PUT /api/v1/clients/:id' do
+    let(:user) { create(:user) }
+    let(:token) { AuthenticationTokenService.call(user.id) }
+
     context 'valid parameters' do
       it 'should return success status' do
-        client = create(:client)
+        client = create(:client, user_id: user.id)
 
         put "/api/v1/clients/#{client.id}", params: {
           client: { name: 'Kleber' }
+        }, header: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(response).to have_http_status(200)
       end
 
       it 'should update the clients info' do
-        client = create(:client)
+        client = create(:client, user_id: user.id)
 
         put "/api/v1/clients/#{client.id}", params: {
           client: { name: 'Kleber' }
+        }, header: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(Client.last.name).to eq('Kleber')
@@ -118,10 +125,12 @@ RSpec.describe "Clients", type: :request do
 
     context 'invalid parameters' do
       it 'should not edit the client' do
-        client = create(:client)
+        client = create(:client, user_id: user.id)
 
         put "/api/v1/clients/#{client.id}", params: {
           client: { name: '', email: '' }
+        }, header: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(Client.last.name).to eq(client.name)
@@ -131,6 +140,8 @@ RSpec.describe "Clients", type: :request do
       it 'should return client not found error' do
         put '/api/v1/clients/999', params: {
           client: { name: 'Kleber' }
+        }, header: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(response.body).to include('Client not found')

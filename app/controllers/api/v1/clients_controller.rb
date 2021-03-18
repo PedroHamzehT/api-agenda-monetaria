@@ -16,7 +16,7 @@ module Api
       end
 
       def create
-        @client = Client.new(client_params)
+        @client = Client.new(client_params.merge({ user_id: session[:user_id] }))
         if @client.save
           render json: @client, status: 201
         else
@@ -47,11 +47,11 @@ module Api
       private
 
       def client_params
-        params.require(:client).permit(:name, :email, :cellphone, :description).merge({ user_id: session[:user_id] })
+        params.require(:client).permit(:name, :email, :cellphone, :description)
       end
 
       def set_client
-        @client = Client.find(params[:id])
+        @client = Client.find_by(id: params[:id], user_id: session[:user_id])
       rescue ActiveRecord::RecordNotFound
         render json: { error: 'Client not found' }, status: 400
       end
