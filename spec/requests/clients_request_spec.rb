@@ -103,7 +103,7 @@ RSpec.describe "Clients", type: :request do
 
         put "/api/v1/clients/#{client.id}", params: {
           client: { name: 'Kleber' }
-        }, header: {
+        }, headers: {
           Authorization: "Bearer #{token}"
         }
 
@@ -115,7 +115,7 @@ RSpec.describe "Clients", type: :request do
 
         put "/api/v1/clients/#{client.id}", params: {
           client: { name: 'Kleber' }
-        }, header: {
+        }, headers: {
           Authorization: "Bearer #{token}"
         }
 
@@ -129,7 +129,7 @@ RSpec.describe "Clients", type: :request do
 
         put "/api/v1/clients/#{client.id}", params: {
           client: { name: '', email: '' }
-        }, header: {
+        }, headers: {
           Authorization: "Bearer #{token}"
         }
 
@@ -140,7 +140,7 @@ RSpec.describe "Clients", type: :request do
       it 'should return client not found error' do
         put '/api/v1/clients/999', params: {
           client: { name: 'Kleber' }
-        }, header: {
+        }, headers: {
           Authorization: "Bearer #{token}"
         }
 

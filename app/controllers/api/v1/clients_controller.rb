@@ -52,8 +52,8 @@ module Api
 
       def set_client
         @client = Client.find_by(id: params[:id], user_id: session[:user_id])
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: 'Client not found' }, status: 400
+
+        return render json: { error: 'Client not found' }, status: 400 if @client.blank?
       end
     end
   end
