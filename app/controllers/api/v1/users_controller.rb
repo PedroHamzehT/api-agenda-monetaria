@@ -55,7 +55,7 @@ module Api
       end
 
       def email_param
-        Base64.decode64 request.headers['email'].to_s
+        request.headers['email'].to_s
       end
 
       def password_param

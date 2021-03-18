@@ -101,7 +101,7 @@ RSpec.describe "Users", type: :request do
     context 'valid parameters' do
       it 'should return success status' do
         get '/api/v1/sign_in', headers: {
-          email: Base64.encode64(user.email),
+          email: user.email,
           password: Base64.encode64('password')
         }
 
@@ -110,7 +110,7 @@ RSpec.describe "Users", type: :request do
 
       it 'should find the user and return a token' do
         get '/api/v1/sign_in', headers: {
-          email: Base64.encode64(user.email),
+          email: user.email,
           password: Base64.encode64('password')
         }
 
@@ -130,7 +130,7 @@ RSpec.describe "Users", type: :request do
       context 'when password is incorrect' do
         it 'should warn email and/or password are incorrect' do
           get '/api/v1/sign_in', headers: {
-            email: Base64.encode64(user.email),
+            email: user.email,
             password: Base64.encode64('123')
           }
 
@@ -143,7 +143,7 @@ RSpec.describe "Users", type: :request do
       context 'when email is incorrect' do
         it 'should warn email and/or password are incorrect' do
           get '/api/v1/sign_in', headers: {
-            email: Base64.encode64('u@example.com'),
+            email: 'u@example.com',
             password: Base64.encode64('password')
           }
 
