@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
       post '/sign_up', to: 'users#sign_up', as: 'user_sign_up'
       get '/sign_in', to: 'users#sign_in', as: 'user_sign_in'
+      put '/user', to: 'users#update', as: 'user_update'
     end
   end
 end

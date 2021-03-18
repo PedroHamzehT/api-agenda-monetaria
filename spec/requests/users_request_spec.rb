@@ -156,18 +156,77 @@ RSpec.describe "Users", type: :request do
   end
 
   describe 'PUT /api/v1/user' do
-    context 'valid parameters' do
-      it 'should return success status'
+    let(:user) { create(:user, name: 'User', email: 'user@example.com', password: 'password', password_confirmation: 'password') }
+    let(:token) { AuthenticationTokenService.call(user.id) }
 
-      it 'should update the user'
+    context 'valid parameters' do
+      it 'should return success status' do
+        put '/api/v1/user', headers: {
+          Authorization: "Bearer #{token}"
+        }, params: {
+          user: {
+            name: 'User 2'
+          }
+        }
+
+        expect(response).to have_http_status(200)
+      end
+
+      it 'should update the user' do
+        put '/api/v1/user', headers: {
+          Authorization: "Bearer #{token}"
+        }, params: {
+          user: {
+            name: 'User 2'
+          }
+        }
+
+        expect(User.last.name).to eq('User 2')
+      end
     end
 
     context 'invalid parameters' do
-      it 'should return bad request status'
+      it 'should return bad request status' do
+        put '/api/v1/user', headers: {
+          Authorization: "Bearer #{token}"
+        }, params: {
+          user: {
+            name: nil,
+            email: nil
+          }
+        }
 
-      it 'should warn when email already exists'
+        expect(response).to have_http_status(400)
+      end
 
-      it 'should warn when user is unauthenticated'
+      it 'should warn when email already exists' do
+        create(:user, email: 'user2@example.com')
+
+        put '/api/v1/user', headers: {
+          Authorization: "Bearer #{token}"
+        }, params: {
+          user: {
+            email: 'user2@example.com'
+          }
+        }
+
+        expect(response.body).to eq(
+          { error: ['Email has already been taken'] }.to_json
+        )
+      end
+
+      it 'should warn when user is unauthenticated' do
+        put '/api/v1/user', params: {
+          user: {
+            email: 'user2@example.com'
+          }
+        }
+
+        expect(response).to have_http_status(401)
+        expect(response.body).to eq(
+          { error: 'User unauthenticated' }.to_json
+        )
+      end
     end
   end
 end

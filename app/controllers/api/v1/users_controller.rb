@@ -4,6 +4,8 @@ module Api
   module V1
     # Controller responsible to sign_up, sign_in and update the users
     class UsersController < ApplicationController
+      before_action :user_authenticated?, only: %i[update]
+
       def sign_up
         @user = User.new(user_params)
 
@@ -29,6 +31,18 @@ module Api
           render json: { token: token }, status: 200
         else
           render json: { error: 'Email and/or password are incorrect' }, status: 400
+        end
+      rescue StandardError => e
+        render json: { error: e.message }, status: 500
+      end
+
+      def update
+        @user = User.find(session[:user_id])
+
+        if @user.update(user_params)
+          render json: { message: 'User updated' }, status: 200
+        else
+          render json: { error: @user.errors.full_messages }, status: 400
         end
       rescue StandardError => e
         render json: { error: e.message }, status: 500
