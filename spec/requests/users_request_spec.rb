@@ -108,7 +108,16 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(200)
       end
 
-      it 'should find the user and return a token'
+      it 'should find the user and return a token' do
+        get '/api/v1/sign_in', headers: {
+          email: Base64.encode64(user.email),
+          password: Base64.encode64('password')
+        }
+
+        expect(response.body).to eq(
+          { token: AuthenticationTokenService.call(user.id) }.to_json
+        )
+      end
     end
 
     context 'inavlid parameters' do
