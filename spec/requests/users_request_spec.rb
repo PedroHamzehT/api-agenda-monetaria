@@ -127,9 +127,31 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(400)
       end
 
-      it 'should warn when email not found'
+      context 'when password is incorrect' do
+        it 'should warn email and/or password are incorrect' do
+          get '/api/v1/sign_in', headers: {
+            email: Base64.encode64(user.email),
+            password: Base64.encode64('123')
+          }
 
-      it 'should warn when password not found with the email'
+          expect(response.body).to eq(
+            { error: 'Email and/or password are incorrect' }.to_json
+          )
+        end
+      end
+
+      context 'when email is incorrect' do
+        it 'should warn email and/or password are incorrect' do
+          get '/api/v1/sign_in', headers: {
+            email: Base64.encode64('u@example.com'),
+            password: Base64.encode64('password')
+          }
+
+          expect(response.body).to eq(
+            { error: 'Email and/or password are incorrect' }.to_json
+          )
+        end
+      end
     end
   end
 
