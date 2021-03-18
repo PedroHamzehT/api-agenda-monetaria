@@ -127,10 +127,6 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(400)
       end
 
-      it 'should warn when password is missing'
-
-      it 'should warn when email is missing'
-
       it 'should warn when email not found'
 
       it 'should warn when password not found with the email'
