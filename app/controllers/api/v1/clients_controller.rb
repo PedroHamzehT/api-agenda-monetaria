@@ -4,6 +4,7 @@ module Api
   module V1
     # Responsible for the clients api endpoints
     class ClientsController < ApplicationController
+      before_action :user_authenticated?
       before_action :set_client, only: %i[update sales]
 
       def index
