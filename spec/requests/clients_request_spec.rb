@@ -28,6 +28,17 @@ RSpec.describe "Clients", type: :request do
 
       expect(JSON.parse(response.body).count).to eq(20)
     end
+
+    it 'should warn when user is unauthenticated' do
+      create_list(:client, 3)
+
+      get '/api/v1/clients'
+
+      expect(response).to have_http_status(401)
+      expect(response.body).to eq(
+        { error: 'User is unauthenticated' }.to_json
+      )
+    end
   end
 
   describe 'POST /api/v1/clients' do
