@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resources :payment_histories, only: %i[create update destroy]
 
       post '/sign_up', to: 'users#sign_up', as: 'user_sign_up'
+      get '/sign_in', to: 'users#sign_in', as: 'user_sign_in'
     end
   end
 end

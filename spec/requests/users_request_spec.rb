@@ -96,8 +96,17 @@ RSpec.describe "Users", type: :request do
   end
 
   describe 'POST /api/v1/sign_in' do
+    let(:user) { create(:user, email: 'user@example.com', password: 'password', password_confirmation: 'password') }
+
     context 'valid parameters' do
-      it 'should return success status'
+      it 'should return success status' do
+        get '/api/v1/sign_in', headers: {
+          email: Base64.encode64(user.email),
+          password: Base64.encode64('password')
+        }
+
+        expect(response).to have_http_status(200)
+      end
 
       it 'should find the user and return a token'
     end
@@ -107,7 +116,7 @@ RSpec.describe "Users", type: :request do
 
       it 'should warn when password is missing'
 
-      it 'should warn when email already exists'
+      it 'should warn when email is missing'
 
       it 'should warn when email not found'
 

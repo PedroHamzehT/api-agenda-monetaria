@@ -16,12 +16,37 @@ module Api
         render json: { error: e.message }, status: 500
       end
 
-      def sign_in; end
+      def sign_in
+        @user = User.find_by(email: email_param)&.authenticate(password_param)
+
+        if @user
+          token = AuthenticationTokenService.call(@user.id)
+          render json: { token: token }, status: 200
+        else
+          render json: { error: 'Email and/or password are incorrect' }, status: 400
+        end
+      rescue StandardError => e
+        render json: { error: e.message }, status: 500
+      end
 
       private
 
       def user_params
         params.require(:user).permit(:name, :email, :password, :password_confirmation)
+      end
+
+      def email_param
+        email = Base64.decode64 request.headers['email']
+        render json: { error: 'Email is missing' }, status: 400 if email.blank?
+
+        email
+      end
+
+      def password_param
+        password = Base64.decode64 request.headers['password']
+        render json: { error: 'Password is missing' }, status: 400 if password.blank?
+
+        password
       end
     end
   end
