@@ -6,7 +6,10 @@ module Api
     class UsersController < ApplicationController
       def sign_up
         @user = User.new(user_params)
+
         if @user.save
+          session[:user_id] = @user.id
+
           token = AuthenticationTokenService.call(@user.id)
           render json: { token: token }, status: 201
         else
@@ -20,6 +23,8 @@ module Api
         @user = User.find_by(email: email_param)&.authenticate(password_param)
 
         if @user
+          session[:user_id] = @user.id
+
           token = AuthenticationTokenService.call(@user.id)
           render json: { token: token }, status: 200
         else
