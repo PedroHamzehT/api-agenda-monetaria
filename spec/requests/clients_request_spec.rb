@@ -2,16 +2,23 @@ require 'rails_helper'
 
 RSpec.describe "Clients", type: :request do
   describe 'GET /api/v1/clients' do
+    let(:user) { create(:user) }
+    let(:token) { AuthenticationTokenService.call(user.id) }
+
     it 'should return success status' do
-      get '/api/v1/clients'
+      get '/api/v1/clients', headers: {
+        Authorization: "Bearer #{token}"
+      }
 
       expect(response).to have_http_status(200)
     end
 
     it 'should return a clients list with them infos' do
-      clients = create_list(:client, 3)
+      clients = create_list(:client, 3, user_id: user.id)
 
-      get '/api/v1/clients'
+      get '/api/v1/clients', headers: {
+        Authorization: "Bearer #{token}"
+      }
 
       clients.each do |client|
         expect(response.body).to include(client.name)
@@ -22,17 +29,21 @@ RSpec.describe "Clients", type: :request do
     end
 
     it 'should return only twenty clients per page' do
-      create_list(:client, 25)
+      create_list(:client, 25, user_id: user.id)
 
-      get '/api/v1/clients'
+      get '/api/v1/clients', headers: {
+        Authorization: "Bearer #{token}"
+      }
 
       expect(JSON.parse(response.body).count).to eq(20)
     end
 
     it 'should warn when user is unauthenticated' do
-      create_list(:client, 3)
+      create_list(:client, 3, user_id: user.id)
 
-      get '/api/v1/clients'
+      get '/api/v1/clients', headers: {
+        Authorization: "Bearer #{token}"
+      }
 
       expect(response).to have_http_status(401)
       expect(response.body).to eq(

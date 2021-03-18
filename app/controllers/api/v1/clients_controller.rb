@@ -8,7 +8,7 @@ module Api
       before_action :set_client, only: %i[update sales]
 
       def index
-        @pagy, @clients = pagy(Client.order('name'))
+        @pagy, @clients = pagy(Client.where(user_id: session[:user_id]).order('name'))
 
         render json: @clients, status: 200
       rescue StandardError => e
