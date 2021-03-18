@@ -36,17 +36,11 @@ module Api
       end
 
       def email_param
-        email = Base64.decode64 request.headers['email']
-        render json: { error: 'Email is missing' }, status: 400 if email.blank?
-
-        email
+        Base64.decode64 request.headers['email'].to_s
       end
 
       def password_param
-        password = Base64.decode64 request.headers['password']
-        render json: { error: 'Password is missing' }, status: 400 if password.blank?
-
-        password
+        Base64.decode64 request.headers['password'].to_s
       end
     end
   end

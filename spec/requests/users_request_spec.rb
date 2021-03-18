@@ -121,7 +121,11 @@ RSpec.describe "Users", type: :request do
     end
 
     context 'inavlid parameters' do
-      it 'should return bad request status'
+      it 'should return bad request status' do
+        get '/api/v1/sign_in'
+
+        expect(response).to have_http_status(400)
+      end
 
       it 'should warn when password is missing'
 
