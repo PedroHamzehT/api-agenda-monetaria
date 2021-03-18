@@ -47,7 +47,7 @@ module Api
       private
 
       def client_params
-        params.require(:client).permit(:name, :email, :cellphone, :description)
+        params.require(:client).permit(:name, :email, :cellphone, :description).merge({ user_id: session[:user_id] })
       end
 
       def set_client

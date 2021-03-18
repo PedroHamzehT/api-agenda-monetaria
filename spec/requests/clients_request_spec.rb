@@ -41,24 +41,27 @@ RSpec.describe "Clients", type: :request do
     it 'should warn when user is unauthenticated' do
       create_list(:client, 3, user_id: user.id)
 
-      get '/api/v1/clients', headers: {
-        Authorization: "Bearer #{token}"
-      }
+      get '/api/v1/clients'
 
       expect(response).to have_http_status(401)
       expect(response.body).to eq(
-        { error: 'User is unauthenticated' }.to_json
+        { error: 'User unauthenticated' }.to_json
       )
     end
   end
 
   describe 'POST /api/v1/clients' do
+    let(:user) { create(:user) }
+    let(:token) { AuthenticationTokenService.call(user.id) }
+
     context 'valid parameters' do
       it 'should return created status' do
         client_attributes = FactoryBot.attributes_for(:client)
 
         post '/api/v1/clients', params: {
           client: client_attributes
+        }, headers: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(response).to have_http_status(201)
@@ -69,6 +72,8 @@ RSpec.describe "Clients", type: :request do
 
         post '/api/v1/clients', params: {
           client: client_attributes
+        }, headers: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(Client.last).to have_attributes(client_attributes)
@@ -79,7 +84,9 @@ RSpec.describe "Clients", type: :request do
       it 'should not create a client' do
         expect {
           post '/api/v1/clients', params: {
-            client: { name: '', email: '', cellphone: '', description: '' }
+            client: { name: '', email: '', cellphone: '', description: '' }, headers: {
+              Authorization: "Bearer #{token}"
+            }
           }
         }.to_not change(Client, :count)
       end
