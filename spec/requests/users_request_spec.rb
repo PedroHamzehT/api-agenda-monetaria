@@ -166,6 +166,8 @@ RSpec.describe "Users", type: :request do
       it 'should return bad request status'
 
       it 'should warn when email already exists'
+
+      it 'should warn when user is unauthenticated'
     end
   end
 end
