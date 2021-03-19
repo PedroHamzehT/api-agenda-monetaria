@@ -229,4 +229,49 @@ RSpec.describe "Users", type: :request do
       end
     end
   end
+
+  describe 'PUT /api/v1/user/reset_password' do
+    let(:user) { create(:user) }
+    let(:token) { AuthenticationTokenService.call(user.id) }
+
+    context 'valid parameters' do
+      it 'should change the password successfuly' do
+        put '/api/v1/user/reset_password', params: {
+          user: { password: 'new_password', password_confirmation: 'new_password' }
+        }, headers: {
+          Authorization: "Bearer #{token}"
+        }
+
+        user = User.last.authenticate('new_password')
+        expect(response).to have_http_status(200)
+        expect(user).to be_truthy
+      end
+    end
+
+    context 'invalid parameters' do
+      it 'should warn when user is unauthenticated' do
+        put '/api/v1/user/reset_password', params: {
+          user: { password: 'new_password', password_confirmation: 'new_password' }
+        }
+
+        expect(response).to have_http_status(401)
+        expect(response.body).to eq(
+          { error: 'User unauthenticated' }.to_json
+        )
+      end
+
+      it 'should warn when the passwords do not match' do
+        put '/api/v1/user/reset_password', params: {
+          user: { password: 'new_password', password_confirmation: 'different_new_password' }
+        }, headers: {
+          Authorization: "Bearer #{token}"
+        }
+
+        expect(response).to have_http_status(400)
+        expect(response.body).to eq(
+          { error: ["Password confirmation doesn't match Password"] }.to_json
+        )
+      end
+    end
+  end
 end
