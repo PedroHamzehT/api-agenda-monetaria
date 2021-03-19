@@ -18,7 +18,7 @@ class SaleSerializer < ActiveModel::Serializer
   def products
     object.sale_products.map do |sale_product|
       {
-        product_id: sale_product.product_id,
+        id: sale_product.product_id,
         product_name: sale_product.product.name,
         quantity: sale_product.quantity
       }
@@ -28,6 +28,7 @@ class SaleSerializer < ActiveModel::Serializer
   def payments
     object.payment_histories.map do |payment|
       {
+        id: payment.id,
         pay_value: payment.pay_value,
         date: payment.date.strftime('%d/%m/%Y %H:%M:%S %z')
       }
