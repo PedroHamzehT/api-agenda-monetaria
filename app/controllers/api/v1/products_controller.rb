@@ -4,6 +4,7 @@ module Api
   module V1
     # Responsible for the products api endpoints
     class ProductsController < ApplicationController
+      before_action :user_authenticated?
       before_action :set_product, only: %i[update]
 
       def index

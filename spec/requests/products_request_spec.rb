@@ -19,6 +19,15 @@ RSpec.describe "Products", type: :request do
         expect(response.body).to include(product.description.to_s)
       end
     end
+
+    it 'should warn when user is unauthenticated' do
+      get '/api/v1/products'
+
+      expect(response).to have_http_status(401)
+      expect(response.body).to eq(
+        { error: 'User unauthenticated' }.to_json
+      )
+    end
   end
 
   describe 'POST /api/v1/products' do
