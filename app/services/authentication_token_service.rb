@@ -2,7 +2,7 @@
 
 # Responsible for the authentication flow with JWT
 class AuthenticationTokenService
-  HMAC_SECRET = 'my$ecretK3y'
+  HMAC_SECRET = ENV['HMAC_SECRET']
   ALGORITHM_TYPE = 'HS256'
 
   def self.call(user_id)
