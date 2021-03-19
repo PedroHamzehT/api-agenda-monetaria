@@ -43,9 +43,9 @@ module Api
       end
 
       def set_product
-        @product = Product.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: 'Product not found' }, status: 400
+        @product = Product.find_by(id: params[:id], user_id: session[:user_id])
+
+        return render json: { error: 'Product not found' }, status: 400 if @product.blank?
       end
     end
   end

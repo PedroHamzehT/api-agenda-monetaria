@@ -81,22 +81,29 @@ RSpec.describe "Products", type: :request do
   end
 
   describe 'PUT /api/v1/products/:id' do
+    let(:user) { create(:user) }
+    let(:token) { AuthenticationTokenService.call(user.id) }
+
     context 'valid parameters' do
       it 'should return success status' do
-        product = create(:product)
+        product = create(:product, user_id: user.id)
 
         put "/api/v1/products/#{product.id}", params: {
           product: { name: 'Golden Apple' }
+        }, headers: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(response).to have_http_status(200)
       end
 
       it 'should edit the product' do
-        product = create(:product)
+        product = create(:product, user_id: user.id)
 
         put "/api/v1/products/#{product.id}", params: {
           product: { name: 'Golden Apple' }
+        }, headers: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(Product.last.name).to eq('Golden Apple')
@@ -105,10 +112,12 @@ RSpec.describe "Products", type: :request do
 
     context 'invalid parameters' do
       it 'should not edit the product' do
-        product = create(:product)
+        product = create(:product, user_id: user.id)
 
         put "/api/v1/products/#{product.id}", params: {
           product: { name: '' }
+        }, headers: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(Product.last.name).to eq(product.name)
@@ -117,6 +126,8 @@ RSpec.describe "Products", type: :request do
       it 'should return product not found error' do
         put '/api/v1/products/999', params: {
           params: { name: 'Golden Apple' }
+        }, headers: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(response.body).to include('Product not found')
