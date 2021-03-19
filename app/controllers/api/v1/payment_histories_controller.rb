@@ -4,6 +4,7 @@ module Api
   module V1
     # Responsible for the payment histories api endpoints
     class PaymentHistoriesController < ApplicationController
+      before_action :user_authenticated?
       before_action :set_payment, only: %i[update destroy]
 
       def create
