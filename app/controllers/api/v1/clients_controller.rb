@@ -4,10 +4,11 @@ module Api
   module V1
     # Responsible for the clients api endpoints
     class ClientsController < ApplicationController
+      before_action :user_authenticated?
       before_action :set_client, only: %i[update sales]
 
       def index
-        @pagy, @clients = pagy(Client.order('name'))
+        @pagy, @clients = pagy(Client.where(user_id: session[:user_id]).order('name'))
 
         render json: @clients, status: 200
       rescue StandardError => e
@@ -15,7 +16,7 @@ module Api
       end
 
       def create
-        @client = Client.new(client_params)
+        @client = Client.new(client_params.merge({ user_id: session[:user_id] }))
         if @client.save
           render json: @client, status: 201
         else
@@ -50,9 +51,9 @@ module Api
       end
 
       def set_client
-        @client = Client.find(params[:id])
-      rescue ActiveRecord::RecordNotFound
-        render json: { error: 'Client not found' }, status: 400
+        @client = Client.find_by(id: params[:id], user_id: session[:user_id])
+
+        return render json: { error: 'Client not found' }, status: 400 if @client.blank?
       end
     end
   end

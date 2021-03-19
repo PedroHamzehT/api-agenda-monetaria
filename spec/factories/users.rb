@@ -1,8 +1,8 @@
 FactoryBot.define do
-  factory :client do
+  factory :user do
     name { Faker::Name.name }
     email { Faker::Internet.email }
-    description { 'Some description' }
-    user_id { create(:user).id }
+    password { 'password' }
+    password_confirmation { 'password' }
   end
 end
