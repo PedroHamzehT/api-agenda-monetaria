@@ -45,6 +45,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # ActiveModel::Serializers allows you to generate your JSON in an object-oriented and convention-driven manner.
 gem 'active_model_serializers', '~> 0.10.12'
 gem 'bcrypt', '~> 3.1', '>= 3.1.16'
-gem 'dotenv', '~> 2.7', '>= 2.7.6'
 gem 'jwt', '~> 2.2', '>= 2.2.2'
 gem 'pagy', '~> 3.11'
