@@ -158,6 +158,24 @@ RSpec.describe 'Sales', type: :request do
         expect(Sale.count).to eq(0)
         expect(response.body).to include('Sale must have at least one product')
       end
+
+      it 'should not create a sale with a product that user does not have' do
+        sale_attributes = FactoryBot.attributes_for(:sale, client_id: client.id)
+        product = create(:product)
+        product_attributes = [{ product_id: product.id, quantity: rand(1..9) }]
+
+        post '/api/v1/sales', params: {
+          sale: sale_attributes,
+          products: product_attributes
+        }, headers: {
+          Authorization: "Bearer #{token}"
+        }
+
+        expect(response).to have_http_status(400)
+        expect(response.body).to eq(
+          { error: 'User does not have any of those products' }.to_json
+        )
+      end
     end
   end
 
@@ -169,7 +187,8 @@ RSpec.describe 'Sales', type: :request do
     context 'valid parameters' do
       it 'should return success status' do
         sale = create(:sale, client_id: client.id)
-        create_list(:sale_product, 3, sale_id: sale.id)
+        products = create_list(:product, 3, user_id: user.id)
+        products.each { |product| create(:sale_product, product_id: product.id) }
         products_attributes = SaleProduct.all.map { |sp| { product_id: sp.product_id, quantity: sp.quantity } }
 
         put "/api/v1/sales/#{sale.id}", params: {
@@ -184,7 +203,8 @@ RSpec.describe 'Sales', type: :request do
 
       it 'should update the sale' do
         sale = create(:sale, client_id: client.id)
-        create_list(:sale_product, 3, sale_id: sale.id)
+        products = create_list(:product, 3, user_id: user.id)
+        products.each { |product| create(:sale_product, product_id: product.id) }
         products_attributes = SaleProduct.all.map { |sp| { product_id: sp.product_id, quantity: sp.quantity } }
 
         put "/api/v1/sales/#{sale.id}", params: {
@@ -194,12 +214,13 @@ RSpec.describe 'Sales', type: :request do
           Authorization: "Bearer #{token}"
         }
 
-        expect(Sale.last.parcelling).to eq(99)
+        expect(sale.reload.parcelling).to eq(99)
       end
 
       it 'should update the sale products' do
         sale = create(:sale, client_id: client.id)
-        create_list(:sale_product, 3, sale_id: sale.id)
+        products = create_list(:product, 3, user_id: user.id)
+        products.each { |product| create(:sale_product, product_id: product.id) }
         products_attributes = [SaleProduct.first].map do |sp|
           { product_id: sp.product_id, quantity: (sp.quantity + 2) }
         end
@@ -240,6 +261,23 @@ RSpec.describe 'Sales', type: :request do
         }
 
         expect(response.body).to include('Sale not found')
+      end
+
+      it 'should not create a sale with a product that user does not have' do
+        sale = create(:sale, client_id: client.id)
+        product = create(:product)
+        product_attributes = [{ product_id: product.id, quantity: rand(1..9) }]
+
+        put "/api/v1/sales/#{sale.id}", params: {
+          products: product_attributes
+        }, headers: {
+          Authorization: "Bearer #{token}"
+        }
+
+        expect(response).to have_http_status(400)
+        expect(response.body).to eq(
+          { error: 'User does not have any of those products' }.to_json
+        )
       end
     end
   end

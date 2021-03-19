@@ -8,6 +8,7 @@ module Api
       before_action :set_sale, only: %i[update payments]
       before_action :set_session_user, only: %i[index]
       before_action :check_products, only: %i[create]
+      before_action :validate_and_filter_products, only: %i[create update]
 
       def index
         @sales = @session_user.sales.order('sale_date')
@@ -60,7 +61,7 @@ module Api
       end
 
       def add_products_to_sale
-        products_params.each do |product_param|
+        validate_and_filter_products.each do |product_param|
           @sale.sale_products.create(product_param)
         end
       end
@@ -69,7 +70,7 @@ module Api
         products_id = products_params.map { |product_param| product_param['product_id'] }
         @sale.sale_products.where.not(product_id: products_id).destroy_all
 
-        products_params.each do |product_param|
+        validate_and_filter_products.each do |product_param|
           sp = @sale.sale_products.find_or_create_by(product_id: product_param['product_id'])
           sp.quantity = product_param['quantity'].to_i
           sp.save!
@@ -94,6 +95,18 @@ module Api
         @sale = Sale.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         render json: { error: 'Sale not found' }
+      end
+
+      def validate_and_filter_products
+        return if products_params.blank?
+
+        products = products_params.select do |product|
+          Product.find_by(id: product[:product_id], user_id: session[:user_id]).present?
+        end
+
+        return render json: { error: 'User does not have any of those products' }, status: 400 if products.blank?
+
+        products
       end
     end
   end
