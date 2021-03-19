@@ -4,7 +4,9 @@ class ApplicationController < ActionController::API
   def user_authenticated?
     return render json: { error: 'User unauthenticated' }, status: 401 if request.headers['Authorization'].blank?
 
-    token = request.headers['Authorization'].split(' ').last
+    token_type, token = request.headers['Authorization'].split(' ')
+    return render json: { error: 'Wrong token' }, status: 401 if token_type != 'Bearer'
+
     decoded_token = JWT.decode(
       token,
       AuthenticationTokenService::HMAC_SECRET,
