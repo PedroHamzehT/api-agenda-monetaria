@@ -6,4 +6,5 @@ class User < ApplicationRecord
 
   has_many :clients
   has_many :products
+  has_many :sales, through: :clients
 end

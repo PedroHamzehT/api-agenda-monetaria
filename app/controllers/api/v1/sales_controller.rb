@@ -4,11 +4,13 @@ module Api
   module V1
     # Responsible for the sales api endpoints
     class SalesController < ApplicationController
+      before_action :user_authenticated?
       before_action :set_sale, only: %i[update payments]
+      before_action :set_session_user, only: %i[index]
       before_action :check_products, only: %i[create]
 
       def index
-        @sales = Sale.order('sale_date')
+        @sales = @session_user.sales.order('sale_date')
         @sales = @sales.where(client_id: params[:client]) if params[:client].present?
         @sales = @sales.where(paid: params[:paid]) if params[:paid].present?
 
@@ -52,6 +54,10 @@ module Api
       end
 
       private
+
+      def set_session_user
+        @session_user = User.find(session[:user_id])
+      end
 
       def add_products_to_sale
         products_params.each do |product_param|
