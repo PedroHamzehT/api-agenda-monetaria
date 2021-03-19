@@ -35,7 +35,7 @@ RSpec.describe "Users", type: :request do
 
         expect(decoded_token).to eq(
           [
-            { 'user_id' => User.last.id },
+            { 'exp' => Time.now.to_i + 4 * 3600, 'user_id' => User.last.id },
             { 'alg' => 'HS256' }
           ]
         )

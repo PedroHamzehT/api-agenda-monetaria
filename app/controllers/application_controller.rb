@@ -15,5 +15,7 @@ class ApplicationController < ActionController::API
     )
 
     session[:user_id] = decoded_token.first['user_id']
+  rescue JWT::ExpiredSignature
+    render json: { error: 'User token expired' }, status: 401
   end
 end

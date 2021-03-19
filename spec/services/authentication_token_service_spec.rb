@@ -13,7 +13,7 @@ describe AuthenticationTokenService do
 
       expect(decoded_token).to eq(
         [
-          { 'user_id' => user.id },
+          { 'exp' => Time.now.to_i + 4 * 3600, 'user_id' => user.id },
           { 'alg' => 'HS256' }
         ]
       )
