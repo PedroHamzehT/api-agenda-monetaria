@@ -90,6 +90,17 @@ RSpec.describe "Clients", type: :request do
           }
         }.to_not change(Client, :count)
       end
+
+      it 'should warn when user is unauthenticated' do
+        post '/api/v1/clients', params: {
+          client: { name: '', email: '', cellphone: '', description: '' }
+        }
+
+        expect(response).to have_http_status(401)
+        expect(response.body).to eq(
+          { error: 'User unauthenticated' }.to_json
+        )
+      end
     end
   end
 
@@ -146,6 +157,17 @@ RSpec.describe "Clients", type: :request do
 
         expect(response.body).to include('Client not found')
       end
+
+      it 'should warn when user is unauthenticated' do
+        put '/api/v1/clients/999', params: {
+          client: { name: 'Kleber' }
+        }
+
+        expect(response).to have_http_status(401)
+        expect(response.body).to eq(
+          { error: 'User unauthenticated' }.to_json
+        )
+      end
     end
   end
 
@@ -194,6 +216,15 @@ RSpec.describe "Clients", type: :request do
 
         expect(response.body).to include('Client not found')
       end
+    end
+
+    it 'should warn when user is unauthenticated' do
+      get '/api/v1/clients/1/sales'
+
+      expect(response).to have_http_status(401)
+      expect(response.body).to eq(
+        { error: 'User unauthenticated' }.to_json
+      )
     end
   end
 end
