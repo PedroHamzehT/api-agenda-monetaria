@@ -38,22 +38,29 @@ RSpec.describe "Products", type: :request do
   end
 
   describe 'POST /api/v1/products' do
+    let(:user) { create(:user) }
+    let(:token) { AuthenticationTokenService.call(user.id) }
+
     context 'valid parameters' do
       it 'should return success status' do
-        product_attributes = FactoryBot.attributes_for(:product)
+        product_attributes = FactoryBot.attributes_for(:product, user_id: user.id)
 
         post '/api/v1/products', params: {
           product: product_attributes
+        }, headers: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(response).to have_http_status(201)
       end
 
       it 'should create a product' do
-        product_attributes = FactoryBot.attributes_for(:product)
+        product_attributes = FactoryBot.attributes_for(:product, user_id: user.id)
 
         post '/api/v1/products', params: {
           product: product_attributes
+        }, headers: {
+          Authorization: "Bearer #{token}"
         }
 
         expect(Product.last).to have_attributes(product_attributes)
@@ -65,6 +72,8 @@ RSpec.describe "Products", type: :request do
         expect {
           post '/api/v1/products', params: {
             product: { name: '', value: '', description: '' }
+          }, headers: {
+            Authorization: "Bearer #{token}"
           }
         }.to_not change(Product, :count)
       end
