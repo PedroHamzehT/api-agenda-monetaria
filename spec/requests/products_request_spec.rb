@@ -2,16 +2,23 @@ require 'rails_helper'
 
 RSpec.describe "Products", type: :request do
   describe 'GET /api/v1/products' do
+    let(:user) { create(:user) }
+    let(:token) { AuthenticationTokenService.call(user.id) }
+
     it 'should return success status' do
-      get '/api/v1/products'
+      get '/api/v1/products', headers: {
+        Authorization: "Bearer #{token}"
+      }
 
       expect(response).to have_http_status(200)
     end
 
     it 'should return a products list' do
-      products = create_list(:product, 3)
+      products = create_list(:product, 3, user_id: user.id)
 
-      get '/api/v1/products'
+      get '/api/v1/products', headers: {
+        Authorization: "Bearer #{token}"
+      }
 
       products.each do |product|
         expect(response.body).to include(product.name)
