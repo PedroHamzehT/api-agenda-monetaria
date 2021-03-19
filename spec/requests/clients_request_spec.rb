@@ -150,21 +150,29 @@ RSpec.describe "Clients", type: :request do
   end
 
   describe 'GET /api/v1/clients/:id/sales' do
+    let(:user) { create(:user) }
+    let(:token) { AuthenticationTokenService.call(user.id) }
+
     context 'valid client id' do
       it 'should return success status' do
-        client = create(:sale).client
+        client = create(:client, user_id: user.id)
+        create(:sale, client_id: client.id)
 
-        get "/api/v1/clients/#{client.id}/sales"
+        get "/api/v1/clients/#{client.id}/sales", headers: {
+          Authorization: "Bearer #{token}"
+        }
 
         expect(response).to have_http_status(200)
       end
 
       it 'should return a clients sales list' do
-        client = create(:client)
+        client = create(:client, user_id: user.id)
         create_list(:sale, 3)
         sales = create_list(:sale, 3, client_id: client.id)
 
-        get "/api/v1/clients/#{client.id}/sales"
+        get "/api/v1/clients/#{client.id}/sales", headers: {
+          Authorization: "Bearer #{token}"
+        }
 
         api_result = JSON.parse response.body
         expect(api_result.size).to eq(3)
@@ -180,7 +188,9 @@ RSpec.describe "Clients", type: :request do
 
     context 'invalid client id' do
       it 'should return client not found error' do
-        get '/api/v1/clients/999/sales'
+        get '/api/v1/clients/999/sales', headers: {
+          Authorization: "Bearer #{token}"
+        }
 
         expect(response.body).to include('Client not found')
       end
