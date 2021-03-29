@@ -61,6 +61,10 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
+    babel-source (5.8.35)
+    babel-transpiler (0.7.0)
+      babel-source (>= 4.0, < 6)
+      execjs (~> 2.0)
     bcrypt (3.1.16)
     bootsnap (1.7.2)
       msgpack (~> 1.0)
@@ -69,9 +73,11 @@ GEM
     case_transform (0.2)
       activesupport
     concurrent-ruby (1.1.8)
+    connection_pool (2.2.3)
     crass (1.0.6)
     diff-lcs (1.4.4)
     erubi (1.10.0)
+    execjs (2.7.0)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.1.0)
@@ -112,8 +118,13 @@ GEM
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
+<<<<<<< HEAD
     rack-cors (1.1.1)
       rack (>= 2.0.0)
+=======
+    rack-proxy (0.6.5)
+      rack
+>>>>>>> f3147bfa4170201c679522508ad94979d05f940f
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.0.3.5)
@@ -146,6 +157,12 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    react-rails (2.6.1)
+      babel-transpiler (>= 0.7.0)
+      connection_pool
+      execjs
+      railties (>= 3.2)
+      tilt
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.1)
@@ -163,6 +180,7 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.10.2)
+    semantic_range (3.0.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -176,8 +194,14 @@ GEM
       sprockets (>= 3.0.0)
     thor (1.1.0)
     thread_safe (0.3.6)
+    tilt (2.0.10)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
+    webpacker (5.2.1)
+      activesupport (>= 5.2)
+      rack-proxy (>= 0.6.1)
+      railties (>= 5.2)
+      semantic_range (>= 2.3.0)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -200,10 +224,12 @@ DEPENDENCIES
   puma (~> 4.1)
   rack-cors (~> 1.1, >= 1.1.1)
   rails (~> 6.0.3, >= 6.0.3.5)
+  react-rails (~> 2.6, >= 2.6.1)
   rspec-rails (~> 4.0, >= 4.0.2)
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
+  webpacker (~> 5.2, >= 5.2.1)
 
 RUBY VERSION
    ruby 2.5.3p105
