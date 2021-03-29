@@ -47,9 +47,4 @@ gem 'active_model_serializers', '~> 0.10.12'
 gem 'bcrypt', '~> 3.1', '>= 3.1.16'
 gem 'jwt', '~> 2.2', '>= 2.2.2'
 gem 'pagy', '~> 3.11'
-<<<<<<< HEAD
 gem 'rack-cors', '~> 1.1', '>= 1.1.1'
-=======
-gem 'react-rails', '~> 2.6', '>= 2.6.1'
-gem 'webpacker', '~> 5.2', '>= 5.2.1'
->>>>>>> f3147bfa4170201c679522508ad94979d05f940f
