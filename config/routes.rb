@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       get '/sign_in', to: 'users#sign_in', as: 'user_sign_in'
       put '/user', to: 'users#update', as: 'user_update'
       put '/user/reset_password', to: 'users#reset_password', as: 'user_reset_password'
+      get '/validate_token', to: 'users#validate_token', as: 'user_validate_token'
     end
   end
 end

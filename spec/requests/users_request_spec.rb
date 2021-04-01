@@ -274,4 +274,51 @@ RSpec.describe "Users", type: :request do
       end
     end
   end
+
+  describe 'GET /api/v1/validate_token' do
+    let(:user) { create(:user) }
+    let(:token) { AuthenticationTokenService.call(user.id) }
+
+    context 'valid token' do
+      it 'should return success status' do
+        get '/api/v1/validate_token', headers: {
+          Authorization: "Bearer #{token}"
+        }
+
+        expect(response).to have_http_status(200)
+      end
+
+      it 'should return the message valid token' do
+        get '/api/v1/validate_token', headers: {
+          Authorization: "Bearer #{token}"
+        }
+
+        expect(response.body).to eq(
+          { message: 'Valid token' }.to_json
+        )
+      end
+    end
+
+    context 'invalid token' do
+      let(:token) { AuthenticationTokenService.call(user.id, (DateTime.now.to_i - 1)) }
+
+      it 'should return unauthorized status' do
+        get '/api/v1/validate_token', headers: {
+          Authorization: "Bearer #{token}"
+        }
+
+        expect(response).to have_http_status(401)
+      end
+
+      it 'should return the message User token expired' do
+        get '/api/v1/validate_token', headers: {
+          Authorization: "Bearer #{token}"
+        }
+
+        expect(response.body).to eq(
+          { error: 'User token expired' }.to_json
+        )
+      end
+    end
+  end
 end

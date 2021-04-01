@@ -4,7 +4,7 @@ module Api
   module V1
     # Controller responsible to sign_up, sign_in and update the users
     class UsersController < ApplicationController
-      before_action :user_authenticated?, only: %i[update reset_password]
+      before_action :user_authenticated?, only: %i[update reset_password validate_token]
       before_action :set_user, only: %i[update reset_password]
 
       def sign_up
@@ -55,6 +55,10 @@ module Api
         end
       rescue StandardError => e
         render json: { error: e.message }, status: 500
+      end
+
+      def validate_token
+        render json: { message: 'Valid token' }, status: 200
       end
 
       private
