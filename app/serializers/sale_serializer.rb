@@ -12,7 +12,7 @@ class SaleSerializer < ActiveModel::Serializer
              :updated_at
 
   def sale_date
-    object.sale_date.strftime('%d/%m/%Y %H:%M:%S %z')
+    object.sale_date.strftime('%d/%m/%Y')
   end
 
   def products
@@ -30,7 +30,7 @@ class SaleSerializer < ActiveModel::Serializer
       {
         id: payment.id,
         pay_value: payment.pay_value,
-        date: payment.date.strftime('%d/%m/%Y %H:%M:%S %z')
+        date: payment.date.strftime('%d/%m/%Y')
       }
     end
   end
