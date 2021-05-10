@@ -34,4 +34,8 @@ class SaleSerializer < ActiveModel::Serializer
       }
     end
   end
+
+  def total
+    '%.2f' % object.total
+  end
 end
