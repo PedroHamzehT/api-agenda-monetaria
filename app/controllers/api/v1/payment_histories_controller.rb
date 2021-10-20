@@ -28,6 +28,12 @@ module Api
         render json: { error: e.message }, status: 500
       end
 
+      def create_update
+        PaymentHistories::CreatePayments.call(payments_params)
+
+        render json: { message: 'Pagamentos criados com sucesso!' }, status: 200
+      end
+
       def destroy
         @payment.destroy
 
@@ -37,6 +43,10 @@ module Api
       end
 
       private
+
+      def payments_params
+        params.require(:payment_history).permit(:sale_id, payments: %i[id pay_value date])
+      end
 
       def payment_params
         params.require(:payment_history).permit(:date, :pay_value, :sale_id)

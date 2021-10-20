@@ -10,7 +10,8 @@ Rails.application.routes.draw do
       resources :sales, only: %i[index create update]
       get '/sales/:id/payments', to: 'sales#payments', as: 'sale_payments'
 
-      resources :payment_histories, only: %i[create update destroy]
+      resources :payment_histories, only: %i[update destroy]
+      post '/payments', to: 'payment_histories#create_update', as: 'create_update_payments'
 
       post '/sign_up', to: 'users#sign_up', as: 'user_sign_up'
       get '/sign_in', to: 'users#sign_in', as: 'user_sign_in'
