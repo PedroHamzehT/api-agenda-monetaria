@@ -3,8 +3,8 @@ module PaymentHistories
     include Interactor
 
     def call
-      find_sale
       validate_params!
+      find_sale
       create_payments
     end
 
@@ -16,7 +16,7 @@ module PaymentHistories
 
     def validate_params!
       raise 'Invalid payments!' if context.payments.blank?
-      raise 'Invalid sale!'     if context.sale.blank?
+      raise 'Invalid sale id!'     if context.sale_id.blank?
     end
 
     def create_payments
