@@ -4,42 +4,61 @@ RSpec.describe "PaymentHistories", type: :request do
   describe 'POST /payments_histories' do
     let(:user) { create(:user) }
     let(:token) { AuthenticationTokenService.call(user.id) }
+    let(:payment_history_attributes) { FactoryBot.attributes_for(:payment_history) }
 
     context 'valid parameters' do
-      it 'should return success status' do
-        payment_attributes = FactoryBot.attributes_for(:payment_history)
+      let(:payments_body) do
+        {
+          payment_history: {
+            sale_id: payment_history_attributes[:sale_id],
+            payments: [
+              {
+                pay_value: payment_history_attributes[:pay_value],
+                date: payment_history_attributes[:date]
+              }
+            ]
+          }
+        }
+      end
 
-        post '/api/v1/payment_histories', params: {
-          payment_history: payment_attributes
-        }, headers: {
+      it 'should return success status' do
+        post '/api/v1/payments', params: payments_body, headers: {
           Authorization: "Bearer #{token}"
         }
 
-        expect(response).to have_http_status(201)
+        expect(response).to have_http_status(200)
       end
 
       it 'should create a payment history' do
-        payment_attributes = FactoryBot.attributes_for(:payment_history)
-
-        expect {
-          post '/api/v1/payment_histories', params: {
-            payment_history: payment_attributes
-          }, headers: {
+        expect do
+          post '/api/v1/payments', params: payments_body, headers: {
             Authorization: "Bearer #{token}"
           }
-        }.to change(PaymentHistory, :count)
+        end.to change(PaymentHistory, :count)
       end
     end
 
     context 'invalid parameters' do
+      let(:payments_body) do
+        {
+          payment_history: {
+            sale_id: payment_history_attributes[:sale_id],
+            payments: [
+              {
+                pay_value: nil,
+                date: nil
+              }
+            ]
+          }
+        }
+      end
+
       it 'should not create a payment_history' do
-        expect {
-          post '/api/v1/payment_histories', params: {
-            payment_history: { pay_value: nil, date: nil }
-          }, headers: {
+        expect do
+          post '/api/v1/payments', params: payments_body, headers: {
             Authorization: "Bearer #{token}"
           }
-        }.to_not change(PaymentHistory, :count)
+        end.to_not change(PaymentHistory, :count)
       end
     end
   end
