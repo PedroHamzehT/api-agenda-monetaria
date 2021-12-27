@@ -1,9 +1,7 @@
 module PaymentHistories
-  class CreatePayments
-    include Interactor
-
+  class CreatePayments < ApplicationInteractor
     def call
-      validate_params!
+      validate_params! :payments, :sale_id
       find_sale
       create_payments
     end
@@ -12,11 +10,6 @@ module PaymentHistories
 
     def find_sale
       context.sale = Sale.find_by_id(context.sale_id)
-    end
-
-    def validate_params!
-      raise 'Invalid payments!' if context.payments.blank?
-      raise 'Invalid sale id!'     if context.sale_id.blank?
     end
 
     def create_payments

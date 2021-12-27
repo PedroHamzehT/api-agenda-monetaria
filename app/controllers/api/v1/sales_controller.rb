@@ -47,9 +47,10 @@ module Api
       end
 
       def payments
-        @payments = @sale.payment_histories
+        payments = @sale.payment_histories
+        list = Sales::ListPayments.call(payments: payments).list
 
-        render json: @payments, status: 200
+        render json: list, status: 200
       rescue StandardError => e
         render json: { error: e.message }, status: 500
       end
