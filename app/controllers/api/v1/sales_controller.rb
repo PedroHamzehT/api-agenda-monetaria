@@ -9,12 +9,9 @@ module Api
       before_action :set_session_user, only: %i[index]
       before_action :check_products, only: %i[create]
       before_action :validate_and_filter_products, only: %i[create update]
+      before_action :set_sales, only: %i[index]
 
       def index
-        @sales = @session_user.sales.order('sale_date')
-        @sales = @sales.where(client_id: params[:client]) if params[:client].present?
-        @sales = @sales.where(paid: params[:paid]) if params[:paid].present?
-
         @pagy, @sales = pagy(@sales)
         render json: @sales, status: 200
       rescue StandardError => e
@@ -56,6 +53,12 @@ module Api
       end
 
       private
+
+      def set_sales
+        @sales = @session_user.sales.order('sale_date')
+        @sales = @sales.where(client_id: params[:client]) if params[:client].present?
+        @sales = @sales.where(paid: params[:paid]) if params[:paid].present?
+      end
 
       def set_session_user
         @session_user = User.find(session[:user_id])

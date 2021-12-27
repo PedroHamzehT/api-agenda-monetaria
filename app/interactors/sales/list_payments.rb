@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Sales
+  # Class responsible to list payments formatted
   class ListPayments < ApplicationInteractor
     def call
       validate_params! :payments

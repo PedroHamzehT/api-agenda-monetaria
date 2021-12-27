@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ApplicationInteractor
+class ApplicationInteractor # rubocop:disable Style/Documentation
   include Interactor
 
   def validate_params!(*params)

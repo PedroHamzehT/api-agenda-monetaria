@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module PaymentHistories
+  # Responsible to execute the payments creating flow
   class CreatePayments < ApplicationInteractor
     def call
       validate_params! :payments, :sale_id

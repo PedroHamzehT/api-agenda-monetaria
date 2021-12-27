@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Responsible to serialize the Sale model
 class SaleSerializer < ActiveModel::Serializer
   attributes :id,
              :parcelling,
@@ -38,6 +39,6 @@ class SaleSerializer < ActiveModel::Serializer
   end
 
   def total
-    '%.2f' % object.total
+    format('%.2f', object.total)
   end
 end

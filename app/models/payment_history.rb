@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Class to create PaymentHistory model and bind with payment_histories table
 class PaymentHistory < ApplicationRecord
   after_save :update_sale_status
 

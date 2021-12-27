@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Class for create SaleProduct model and bind with sale_products table
 class SaleProduct < ApplicationRecord
   before_save :set_total
   after_save :update_total_sale
