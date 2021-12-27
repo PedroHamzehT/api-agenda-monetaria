@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Authentications", type: :request do
+RSpec.describe 'Authentications', type: :request do
   describe 'endpoint call' do
     let(:user) { create(:user) }
     let(:token) { AuthenticationTokenService.call(user.id) }

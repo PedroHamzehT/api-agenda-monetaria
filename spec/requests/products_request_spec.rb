@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Products", type: :request do
+RSpec.describe 'Products', type: :request do
   describe 'GET /api/v1/products' do
     let(:user) { create(:user) }
     let(:token) { AuthenticationTokenService.call(user.id) }
@@ -69,13 +71,13 @@ RSpec.describe "Products", type: :request do
 
     context 'invalid parameters' do
       it 'should not create a product' do
-        expect {
+        expect do
           post '/api/v1/products', params: {
             product: { name: '', value: '', description: '' }
           }, headers: {
             Authorization: "Bearer #{token}"
           }
-        }.to_not change(Product, :count)
+        end.to_not change(Product, :count)
       end
     end
   end

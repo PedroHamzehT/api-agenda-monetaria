@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PaymentHistory < ApplicationRecord
   after_save :update_sale_status
 

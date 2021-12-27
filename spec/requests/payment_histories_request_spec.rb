@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "PaymentHistories", type: :request do
+RSpec.describe 'PaymentHistories', type: :request do
   describe 'POST /payments_histories' do
     let(:user) { create(:user) }
     let(:token) { AuthenticationTokenService.call(user.id) }

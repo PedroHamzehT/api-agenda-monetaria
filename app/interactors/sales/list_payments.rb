@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sales
   class ListPayments < ApplicationInteractor
     def call

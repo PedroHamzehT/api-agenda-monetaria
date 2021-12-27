@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Clients", type: :request do
+RSpec.describe 'Clients', type: :request do
   describe 'GET /api/v1/clients' do
     let(:user) { create(:user) }
     let(:token) { AuthenticationTokenService.call(user.id) }
@@ -82,13 +84,13 @@ RSpec.describe "Clients", type: :request do
 
     context 'invalid parameters' do
       it 'should not create a client' do
-        expect {
+        expect do
           post '/api/v1/clients', params: {
             client: { name: '', email: '', cellphone: '', description: '' }, headers: {
               Authorization: "Bearer #{token}"
             }
           }
-        }.to_not change(Client, :count)
+        end.to_not change(Client, :count)
       end
 
       it 'should warn when user is unauthenticated' do

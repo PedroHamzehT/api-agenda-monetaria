@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SaleSerializer < ActiveModel::Serializer
   attributes :id,
              :parcelling,

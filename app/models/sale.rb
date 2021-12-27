@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Sale < ApplicationRecord
   validates_presence_of :sale_date
 

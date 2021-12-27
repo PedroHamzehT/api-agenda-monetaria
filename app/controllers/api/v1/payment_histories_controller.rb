@@ -28,7 +28,7 @@ module Api
         render json: { error: e.message }, status: 500
       end
 
-        def create_update
+      def create_update
         PaymentHistories::CreatePayments.call(payments_params)
 
         render json: { message: 'Pagamentos criados com sucesso!' }, status: 200

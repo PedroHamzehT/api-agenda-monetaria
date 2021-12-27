@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PaymentHistorySerializer < ActiveModel::Serializer
   attributes :id,
              :pay_value,

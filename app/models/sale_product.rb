@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SaleProduct < ApplicationRecord
   before_save :set_total
   after_save :update_total_sale

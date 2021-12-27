@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Users", type: :request do
+RSpec.describe 'Users', type: :request do
   describe 'POST /api/v1/sign_up' do
     context 'valid parameters' do
       it 'should return created status' do
@@ -156,7 +158,9 @@ RSpec.describe "Users", type: :request do
   end
 
   describe 'PUT /api/v1/user' do
-    let(:user) { create(:user, name: 'User', email: 'user@example.com', password: 'password', password_confirmation: 'password') }
+    let(:user) do
+      create(:user, name: 'User', email: 'user@example.com', password: 'password', password_confirmation: 'password')
+    end
     let(:token) { AuthenticationTokenService.call(user.id) }
 
     context 'valid parameters' do
