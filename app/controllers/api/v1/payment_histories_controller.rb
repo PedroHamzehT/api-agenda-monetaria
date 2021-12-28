@@ -31,7 +31,7 @@ module Api
       def create_update
         PaymentHistories::CreatePayments.call(payments_params)
 
-        render json: { message: 'Pagamentos criados com sucesso!' }, status: 200
+        render json: { message: 'Pagamentos salvos com sucesso!' }, status: 200
       end
 
       def destroy
