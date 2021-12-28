@@ -27,7 +27,7 @@ RSpec.describe 'Sales', type: :request do
         expect(response.body).to include(sale.paid.to_s)
         expect(response.body).to include(sale.tax.to_s)
         expect(response.body).to include(sale.parcelling.to_s)
-        expect(response.body).to include(sale.sale_date.strftime('%Y-%m-%d'))
+        expect(response.body).to include(sale.sale_date.strftime('%d-%m-%Y'))
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe 'Sales', type: :request do
         Authorization: "Bearer #{token}"
       }
 
-      expect(response.body).to include(payment.date.strftime('%Y-%m-%d'))
+      expect(response.body).to include(payment.date.strftime('%d-%m-%Y'))
       expect(response.body).to include(payment.pay_value.to_s)
     end
 
@@ -309,7 +309,7 @@ RSpec.describe 'Sales', type: :request do
 
         payments.each do |payment|
           expect(response.body).to include(payment.pay_value.to_s)
-          expect(response.body).to include(payment.date.strftime('%Y-%m-%d'))
+          expect(response.body).to include(payment.date.strftime('%d-%m-%Y'))
         end
       end
     end

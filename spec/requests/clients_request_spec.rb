@@ -205,7 +205,7 @@ RSpec.describe 'Clients', type: :request do
           expect(response.body).to include(sale.paid.to_s)
           expect(response.body).to include(sale.tax.to_s)
           expect(response.body).to include(sale.parcelling.to_s)
-          expect(response.body).to include(sale.sale_date.strftime('%Y-%m-%d'))
+          expect(response.body).to include(sale.sale_date.strftime('%d-%m-%Y'))
         end
       end
     end

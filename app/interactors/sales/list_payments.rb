@@ -12,7 +12,7 @@ module Sales
 
     def list_payments
       context.list = context.payments.map do |payment|
-        { id: payment.id, pay_value: payment.pay_value, date: payment.date.strftime('%Y-%m-%d') }
+        { id: payment.id, pay_value: payment.pay_value, date: payment.date.strftime('%d-%m-%Y') }
       end
     end
   end
